@@ -10,19 +10,18 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* 优化后的字体栈，确保中文字符正确显示 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
             color: #ffffff;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
 
@@ -43,7 +42,7 @@
             left: 0;
             width: 200%;
             height: 100%;
-            background: linear-gradient(90deg, rgba(30, 30, 30, 0.8) 0%, rgba(50, 50, 50, 0.6) 50%, rgba(30, 30, 30, 0.8) 100%);
+            background: linear-gradient(90deg, rgba(15, 15, 15, 0.8) 0%, rgba(30, 30, 30, 0.6) 50%, rgba(15, 15, 15, 0.8) 100%);
             border-radius: 40%;
             animation: wave 15s infinite linear;
         }
@@ -120,17 +119,28 @@
             }
         }
 
-        .container {
+        /* 主容器 */
+        .main-content {
             width: 100%;
             max-width: 800px;
-            background: rgba(30, 30, 30, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            width: 100%;
+            background: rgba(20, 20, 20, 0.85);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
             padding: 50px 40px;
             text-align: center;
             overflow: hidden;
             position: relative;
+            margin-bottom: 20px;
         }
 
         .container::before {
@@ -140,7 +150,7 @@
             left: 0;
             right: 0;
             height: 6px;
-            background: linear-gradient(90deg, #6e8efb, #a777e3);
+            background: linear-gradient(90deg, #8a8a8a, #c0c0c0);
             border-radius: 24px 24px 0 0;
         }
 
@@ -150,7 +160,7 @@
             top: 20px;
             left: 20px;
             padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             font-size: 0.9rem;
@@ -160,14 +170,15 @@
             color: #b0b0b0;
             z-index: 100;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .visitor-counter:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .visitor-counter i {
-            color: #a777e3;
+            color: #c0c0c0;
         }
 
         /* 音乐播放器 */
@@ -181,32 +192,33 @@
             justify-content: center;
             align-items: center;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .music-player:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             transform: scale(1.1);
         }
 
         .music-icon {
             font-size: 24px;
-            color: #a777e3;
+            color: #c0c0c0;
             transition: all 0.3s ease;
         }
 
         .music-player.playing .music-icon {
             animation: rotate 3s linear infinite;
-            color: #6e8efb;
+            color: #e0e0e0;
         }
 
         .music-player.loading .music-icon {
             animation: pulse 1.5s ease-in-out infinite;
-            color: #a777e3;
+            color: #c0c0c0;
         }
 
         @keyframes rotate {
@@ -236,7 +248,6 @@
             transform: translateY(30px);
             animation: fadeInUp 1.5s ease forwards;
             letter-spacing: -1px;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -248,7 +259,6 @@
             margin-bottom: 20px;
             letter-spacing: -1px;
             line-height: 1.1;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -268,7 +278,6 @@
             animation: fadeIn 1s ease 1s forwards;
             font-weight: 300;
             letter-spacing: -0.2px;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -279,7 +288,6 @@
             margin-bottom: 40px;
             font-weight: 300;
             letter-spacing: -0.2px;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -302,7 +310,6 @@
             font-size: 1.1rem;
             color: #cccccc;
             font-weight: 300;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -326,19 +333,18 @@
             text-align: center;
             background: rgba(40, 40, 40, 0.7);
             color: #ffffff;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
 
         .birthday-input:focus {
-            border-color: #a777e3;
-            box-shadow: 0 0 0 4px rgba(167, 119, 227, 0.2);
+            border-color: #c0c0c0;
+            box-shadow: 0 0 0 4px rgba(192, 192, 192, 0.2);
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #6e8efb, #a777e3);
-            color: white;
+            background: linear-gradient(45deg, #8a8a8a, #c0c0c0);
+            color: #1a1a1a;
             border: none;
             padding: 16px 32px;
             border-radius: 12px;
@@ -346,7 +352,6 @@
             font-weight: 500;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 500;
         }
@@ -368,7 +373,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -397,7 +401,6 @@
             margin-bottom: 20px;
             font-weight: 500;
             letter-spacing: -0.5px;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 500;
         }
@@ -407,7 +410,6 @@
             margin-bottom: 25px;
             color: #cccccc;
             font-weight: 300;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -426,7 +428,6 @@
             transform: translateY(20px);
             transition: all 0.5s ease 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            /* 优化后的字体栈，特别确保中文显示 */
             font-family: "SimHei", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "PingFang SC", sans-serif;
         }
 
@@ -443,19 +444,18 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            z-index: 10;
+            z-index: 5;
             pointer-events: none;
         }
 
         .danmu-item {
             position: absolute;
             white-space: nowrap;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.25);
             font-size: 14px;
             font-weight: 300;
             text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
             animation: danmu-move linear forwards;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
         }
 
@@ -468,10 +468,10 @@
             }
         }
 
-        /* 弹幕输入区域 */
+        /* 弹幕输入区域 - 电脑端 */
         .danmu-input-container {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
@@ -479,19 +479,21 @@
             display: flex;
             gap: 10px;
             z-index: 100;
-            padding: 10px;
-            background: rgba(30, 30, 30, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
+            padding: 15px;
+            background: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
         }
 
         .danmu-input {
             flex: 1;
-            padding: 12px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background: rgba(40, 40, 40, 0.7);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            background: rgba(30, 30, 30, 0.8);
             color: #ffffff;
             font-size: 14px;
             outline: none;
@@ -499,26 +501,27 @@
         }
 
         .danmu-input:focus {
-            border-color: #a777e3;
-            box-shadow: 0 0 0 2px rgba(167, 119, 227, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
 
         .danmu-send-btn {
-            background: linear-gradient(45deg, #6e8efb, #a777e3);
-            color: white;
+            background: linear-gradient(45deg, #8a8a8a, #c0c0c0);
+            color: #1a1a1a;
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 14px 22px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .danmu-send-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         }
 
         .danmu-send-btn:active {
@@ -534,7 +537,7 @@
             display: inline-block;
             width: 2px;
             height: 1.2em;
-            background-color: #a777e3;
+            background-color: #c0c0c0;
             margin-left: 2px;
             animation: blink 1s infinite;
             vertical-align: middle;
@@ -550,14 +553,13 @@
         }
 
         .failure-message {
-            color: #ff6b6b;
+            color: #a0a0a0;
             font-size: 1.5rem;
             margin-top: 20px;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s ease;
             font-weight: 300;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -573,11 +575,10 @@
             margin: 25px 0;
             padding: 20px;
             border-radius: 12px;
-            background: rgba(167, 119, 227, 0.1);
-            border-left: 4px solid #a777e3;
+            background: rgba(192, 192, 192, 0.08);
+            border-left: 4px solid #c0c0c0;
             font-size: 1.1rem;
             color: #cccccc;
-            /* 优化后的字体栈 */
             font-family: "SimHei", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "PingFang SC", sans-serif;
         }
 
@@ -588,7 +589,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            /* 优化后的字体栈 */
             font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
@@ -601,7 +601,7 @@
 
         .wechat-id {
             font-size: 1rem;
-            color: #a777e3;
+            color: #c0c0c0;
             font-weight: 500;
         }
 
@@ -623,7 +623,6 @@
             .container {
                 padding: 30px 20px;
                 border-radius: 20px;
-                margin-top: 10px;
                 margin-bottom: 20px;
             }
             
@@ -744,20 +743,26 @@
                 animation: wave 35s infinite linear;
             }
             
-            /* 移动端弹幕区域调整 */
+            /* 移动端弹幕区域调整 - 放在内容区域下方 */
             .danmu-input-container {
-                width: 95%;
-                bottom: 10px;
-                padding: 8px;
+                position: relative;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                width: 100%;
+                max-width: 100%;
+                margin-top: 20px;
+                padding: 12px;
+                border-radius: 14px;
             }
             
             .danmu-input {
-                padding: 10px 12px;
+                padding: 12px 15px;
                 font-size: 13px;
             }
             
             .danmu-send-btn {
-                padding: 10px 15px;
+                padding: 12px 18px;
                 font-size: 13px;
             }
             
@@ -796,7 +801,14 @@
             }
             
             .danmu-input-container {
-                flex-direction: column;
+                padding: 10px;
+            }
+        }
+
+        /* 大屏幕优化 */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 900px;
             }
         }
     </style>
@@ -813,66 +825,70 @@
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
-    <!-- 访客计数 -->
-    <div class="visitor-counter">
-        <i class="fas fa-users"></i>
-        <span>本站累计访客<span id="visitor-count">44</span>人</span>
-    </div>
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 访客计数 -->
+        <div class="visitor-counter">
+            <i class="fas fa-users"></i>
+            <span>本站累计访客<span id="visitor-count">44</span>人</span>
+        </div>
 
-    <!-- 音乐播放器 -->
-    <div class="music-player" id="musicPlayer">
-        <i class="fas fa-music music-icon"></i>
-    </div>
-    <audio id="bgMusic" loop preload="auto">
-        <!-- 这里需要替换为您的音乐文件路径 -->
-        <source src="把回忆拼好给你.mp3" type="audio/mpeg">
-        您的浏览器不支持音频元素。
-    </audio>
+        <!-- 音乐播放器 -->
+        <div class="music-player" id="musicPlayer">
+            <i class="fas fa-music music-icon"></i>
+        </div>
+        <audio id="bgMusic" loop preload="auto">
+            <!-- 这里需要替换为您的音乐文件路径 -->
+            <source src="把回忆拼好给你.mp3" type="audio/mpeg">
+            您的浏览器不支持音频元素。
+        </audio>
 
-    <!-- 弹幕容器 -->
-    <div class="danmu-container" id="danmuContainer"></div>
+        <!-- 弹幕容器 -->
+        <div class="danmu-container" id="danmuContainer"></div>
 
-    <!-- 弹幕输入区域 -->
-    <div class="danmu-input-container">
-        <input type="text" class="danmu-input" id="danmuInput" placeholder="输入弹幕内容..." maxlength="30">
-        <button class="danmu-send-btn" id="danmuSendBtn">发送弹幕</button>
-    </div>
-
-    <div class="container">
-        <h1 class="welcome-text" id="main-title">Hi，欢迎</h1>
-        <p class="subtitle" id="subtitle-text">想想我的生日是什么时候？</p>
-        
-        <div class="input-section">
-            <label class="input-label">请输入我的生日（格式：月.日）</label>
-            <div class="input-container">
-                <input type="text" class="birthday-input" placeholder="例如：1.1">
-                <button class="submit-btn">提交</button>
+        <!-- 主要内容容器 -->
+        <div class="container">
+            <h1 class="welcome-text" id="main-title">Hi，欢迎</h1>
+            <p class="subtitle" id="subtitle-text">猜猜我的生日是什么时候？</p>
+            
+            <div class="input-section">
+                <label class="input-label">请输入我的生日（格式：月.日）</label>
+                <div class="input-container">
+                    <input type="text" class="birthday-input" placeholder="例如：1.1">
+                    <button class="submit-btn">提交</button>
+                </div>
+                <div class="attempts-count">
+                    <i class="fas fa-redo"></i>
+                    <span>剩余尝试次数：<span id="attempts-left">10</span></span>
+                </div>
             </div>
-            <div class="attempts-count">
-                <i class="fas fa-redo"></i>
-                <span>剩余尝试次数：<span id="attempts-left">10</span></span>
+            
+            <div class="result-section" id="success-section">
+                <h2 class="success-title">恭喜你答对了！</h2>
+                <p class="evaluation" id="evaluation-text"></p>
+                <div class="story-text" id="story-text">
+                    <!-- 打字机效果将在这里动态生成 -->
+                </div>
+            </div>
+            
+            <div class="failure-message" id="failure-message">
+                <i class="fas fa-times-circle"></i> 你还是不了解我...你可以走了...
+            </div>
+            
+            <div class="footer">
+                <div class="ip-info">
+                    <i class="fas fa-network-wired"></i>
+                    <span>IP记录已启用</span>
+                </div>
+                <div class="wechat-id">微信号：kirinxuanyyds</div>
+                <div>想说的 © 2025</div>
             </div>
         </div>
         
-        <div class="result-section" id="success-section">
-            <h2 class="success-title">恭喜你答对了！</h2>
-            <p class="evaluation" id="evaluation-text"></p>
-            <div class="story-text" id="story-text">
-                <!-- 打字机效果将在这里动态生成 -->
-            </div>
-        </div>
-        
-        <div class="failure-message" id="failure-message">
-            <i class="fas fa-times-circle"></i> 你还是不了解我...你可以走了...
-        </div>
-        
-        <div class="footer">
-            <div class="ip-info">
-                <i class="fas fa-network-wired"></i>
-                <span>IP记录已启用</span>
-            </div>
-            <div class="wechat-id">微信号：kirinxuanyyds</div>
-            <div>想说的 © 2025</div>
+        <!-- 弹幕输入区域 - 在移动端放在内容区域下方 -->
+        <div class="danmu-input-container">
+            <input type="text" class="danmu-input" id="danmuInput" placeholder="输入弹幕内容..." maxlength="30">
+            <button class="danmu-send-btn" id="danmuSendBtn">发送弹幕</button>
         </div>
     </div>
 
@@ -916,8 +932,8 @@
                 danmuItem.className = 'danmu-item';
                 danmuItem.textContent = text;
                 
-                // 随机位置
-                const top = Math.random() * 85; // 0-85% 的位置，避免与输入区域重叠
+                // 随机位置 - 避免与输入区域重叠
+                const top = Math.random() * 80; // 0-80% 的位置
                 danmuItem.style.top = `${top}%`;
                 
                 // 随机速度
@@ -1208,7 +1224,7 @@
                         birthdayInput.focus();
                         
                         // 添加错误动画效果
-                        birthdayInput.style.borderColor = '#ff6b6b';
+                        birthdayInput.style.borderColor = '#a0a0a0';
                         setTimeout(() => {
                             birthdayInput.style.borderColor = '#444444';
                         }, 500);
@@ -1228,7 +1244,7 @@
                 // 重置尝试次数为10次
                 attemptsLeft = 10;
                 saveAttemptsToStorage(attemptsLeft);
-                attemptsLeftSpan.textContent = attemptsLeft;
+attemptsLeftSpan.textContent = attemptsLeft;
                 
                 // 隐藏输入区域
                 document.querySelector('.input-section').style.display = 'none';
