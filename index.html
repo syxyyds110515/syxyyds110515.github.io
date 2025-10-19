@@ -1,73 +1,72 @@
-
- 
-<头>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>想说的</title>
-    <链接 关系="样式表" 链接="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <样式>
-        *  {
-            边距：0;
-            
-            盒模型：边框盒;
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             /* 优化后的字体栈，确保中文字符正确显示 */
-            字体族："PingFang SC"，"Hiragino Sans GB"，"Microsoft YaHei"，" WenQuanYi Micro Hei"，"Helvetica Neue"，Arial，无衬线;
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
         }
 
-        身体 {
-            背景：线性渐变（135度，#1a1a1a 0%，#2d2d2d 100%）;
-            最小高度：100vh;
-            显示：伸缩;
-            文本对齐：居中;
-            对齐项目：居中;
-            
-            颜色: #ffffff;
-            溢出：隐藏;
-            位置：相对;
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #ffffff;
+            overflow: hidden;
+            position: relative;
         }
 
         /* 波浪背景 */
-        .波形容器 {
-            位置：绝对;
-            顶部：0;
-            左：0;
-            宽度：100%;
-            高度：100%;
-            溢出：隐藏;
-            z轴索引：-1;
+        .wave-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
         }
 
-        .波 {
-            位置：绝对;
-            底部：0;
-            左：0;
-            宽度：200%;
-            高度：100%;
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
             background: linear-gradient(90deg, rgba(30, 30, 30, 0.8) 0%, rgba(50, 50, 50, 0.6) 50%, rgba(30, 30, 30, 0.8) 100%);
             border-radius: 40%;
             animation: wave 15s infinite linear;
         }
 
-
+        .wave:nth-child(2) {
             bottom: 10px;
             opacity: 0.5;
             animation: wave 18s infinite linear;
             animation-direction: reverse;
         }
 
-
+        .wave:nth-child(3) {
             bottom: 20px;
             opacity: 0.3;
-            动画：波 20秒 无限 线性;
+            animation: wave 20s infinite linear;
         }
 
-        @关键帧 波浪 {
+        @keyframes wave {
             0% {
-                变换：平移X（0） 旋转（0度）;
+                transform: translateX(0) rotate(0deg);
             }
             50% {
-
-                变换：平移X(-25%) 旋转(180度);
+                transform: translateX(-25%) rotate(180deg);
             }
             100% {
                 transform: translateX(-50%) rotate(360deg);
@@ -659,7 +658,7 @@
 
     <div class="container">
         <h1 class="welcome-text" id="main-title">Hi，欢迎</h1>
-        <p class="subtitle" id="subtitle-text">想想我的生日是什么时候？</p>
+        <p class="subtitle" id="subtitle-text">猜猜我的生日是什么时候？</p>
         
         <div class="input-section">
             <label class="input-label">请输入我的生日（格式：月.日）</label>
@@ -712,7 +711,7 @@
             // 故事文本
             const storyContent = [
                 "感觉就是对我冷淡了",
-                "是谁不重要，知道的知道，不知道的也不必追究，有些人看了别乱叫",
+                "是谁不重要，知道的知道，不知道的也不必追究，有些人看完希望别乱说",
                 "这么久以来我都是这样觉得",
                 "而且我们没在一起多久，觉得在一起之后，她没有原来的热情了，而且不会主动找话题了，回答也变得简单了，见面时，我总会下意识地期待她能像最初那样，眼睛高兴地望过来。可她的目光常常轻飘飘地掠过我，落在远处的人或物上，仿佛我只是她视野里一个模糊的背景",
                 "有时候我比较的闲，就总会乱想。",
