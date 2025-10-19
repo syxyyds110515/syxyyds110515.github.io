@@ -3,98 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小kの心里话 | 生日记忆挑战</title>
+    <title>小kの心里话</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入思源黑体作为备用字体 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* 使用更通用的字体栈，优先使用系统默认字体 */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-        }
-
-        :root {
-            --primary-color: #a777e3;
-            --secondary-color: #6e8efb;
-            --accent-color: #ff6b6b;
-            --text-color: #ffffff;
-            --text-secondary: #b0b0b0;
-            --bg-dark: #1a1a1a;
-            --bg-darker: #0f0f0f;
-            --card-bg: rgba(30, 30, 30, 0.85);
-            --success-color: #4CAF50;
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* 优化后的字体栈，确保中文字符正确显示 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            color: var(--text-color);
+            color: #ffffff;
             overflow: hidden;
             position: relative;
         }
 
-        /* 高级粒子背景 */
-        #particles-js {
+        /* 波浪背景 */
+        .wave-container {
             position: absolute;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
-            z-index: -2;
-        }
-
-        /* 动态光效 */
-        .light-effect {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(167, 119, 227, 0.2) 0%, rgba(167, 119, 227, 0) 70%);
-            filter: blur(20px);
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             z-index: -1;
-            animation: float 15s infinite ease-in-out;
         }
 
-        .light-effect:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(30, 30, 30, 0.8) 0%, rgba(50, 50, 50, 0.6) 50%, rgba(30, 30, 30, 0.8) 100%);
+            border-radius: 40%;
+            animation: wave 15s infinite linear;
         }
 
-        .light-effect:nth-child(2) {
-            top: 70%;
-            right: 10%;
-            animation-delay: 5s;
+        .wave:nth-child(2) {
+            bottom: 10px;
+            opacity: 0.5;
+            animation: wave 18s infinite linear;
+            animation-direction: reverse;
         }
 
-        .light-effect:nth-child(3) {
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 10s;
+        .wave:nth-child(3) {
+            bottom: 20px;
+            opacity: 0.3;
+            animation: wave 20s infinite linear;
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            25% {
-                transform: translate(50px, -30px) scale(1.1);
+        @keyframes wave {
+            0% {
+                transform: translateX(0) rotate(0deg);
             }
             50% {
-                transform: translate(-30px, 40px) scale(0.9);
+                transform: translateX(-25%) rotate(180deg);
             }
-            75% {
-                transform: translate(-40px, -20px) scale(1.05);
+            100% {
+                transform: translateX(-50%) rotate(360deg);
             }
         }
 
@@ -147,27 +122,15 @@
 
         .container {
             width: 100%;
-            max-width: 900px;
-            background: var(--card-bg);
+            max-width: 800px;
+            background: rgba(30, 30, 30, 0.8);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
-                        0 0 0 1px rgba(255, 255, 255, 0.05),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
             padding: 50px 40px;
             text-align: center;
             overflow: hidden;
             position: relative;
-            transform: translateY(20px);
-            opacity: 0;
-            animation: containerEntrance 1s ease 0.5s forwards;
-        }
-
-        @keyframes containerEntrance {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
 
         .container::before {
@@ -177,7 +140,7 @@
             left: 0;
             right: 0;
             height: 6px;
-            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            background: linear-gradient(90deg, #6e8efb, #a777e3);
             border-radius: 24px 24px 0 0;
         }
 
@@ -195,25 +158,24 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             z-index: 100;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .music-player:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1) rotate(5deg);
+            transform: scale(1.1);
         }
 
         .music-icon {
             font-size: 24px;
-            color: var(--primary-color);
-            transition: var(--transition);
+            color: #a777e3;
+            transition: all 0.3s ease;
         }
 
         .music-player.playing .music-icon {
             animation: rotate 3s linear infinite;
-            color: var(--secondary-color);
+            color: #6e8efb;
         }
 
         @keyframes rotate {
@@ -228,22 +190,27 @@
         .welcome-text {
             font-size: 4.5rem;
             font-weight: 300;
-            color: var(--text-color);
+            color: #ffffff;
             margin-bottom: 20px;
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInUp 1.5s ease forwards;
             letter-spacing: -1px;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
         }
 
         .revealed-text {
             font-size: 3rem;
             font-weight: 300;
-            color: var(--text-color);
+            color: #ffffff;
             margin-bottom: 20px;
             letter-spacing: -1px;
             line-height: 1.1;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
         }
 
         @keyframes fadeInUp {
@@ -255,20 +222,26 @@
 
         .subtitle {
             font-size: 1.3rem;
-            color: var(--text-secondary);
+            color: #b0b0b0;
             margin-bottom: 40px;
             opacity: 0;
             animation: fadeIn 1s ease 1s forwards;
             font-weight: 300;
             letter-spacing: -0.2px;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
         }
 
         .changed-subtitle {
             font-size: 1.3rem;
-            color: var(--text-secondary);
+            color: #b0b0b0;
             margin-bottom: 40px;
             font-weight: 300;
             letter-spacing: -0.2px;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
         }
 
         @keyframes fadeIn {
@@ -287,7 +260,10 @@
             display: block;
             margin-bottom: 18px;
             font-size: 1.1rem;
-            color: var(--text-secondary);
+            color: #cccccc;
+            font-weight: 300;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
 
@@ -302,55 +278,42 @@
         .birthday-input {
             width: 180px;
             padding: 16px 20px;
-            border: 2px solid rgba(68, 68, 68, 0.5);
+            border: 2px solid #444444;
             border-radius: 12px;
             font-size: 1.1rem;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             outline: none;
             text-align: center;
             background: rgba(40, 40, 40, 0.7);
-            color: var(--text-color);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #ffffff;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
         }
 
         .birthday-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(167, 119, 227, 0.2),
-                        inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-color: #a777e3;
+            box-shadow: 0 0 0 4px rgba(167, 119, 227, 0.2);
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            background: linear-gradient(45deg, #6e8efb, #a777e3);
             color: white;
             border: none;
             padding: 16px 32px;
             border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 500;
-            transition: var(--transition);
-            box-shadow: 0 6px 20px rgba(110, 142, 251, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .submit-btn:hover::before {
-            left: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 500;
         }
 
         .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(110, 142, 251, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         }
 
         .submit-btn:active {
@@ -360,30 +323,14 @@
         .attempts-count {
             margin-top: 15px;
             font-size: 0.95rem;
-            color: var(--text-secondary);
+            color: #b0b0b0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-
-        /* 进度条 */
-        .progress-container {
-            width: 100%;
-            max-width: 300px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            margin: 15px auto;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-            border-radius: 3px;
-            width: 100%;
-            transition: width 0.5s ease;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
         }
 
         .result-section {
@@ -394,9 +341,8 @@
             display: none;
             opacity: 0;
             transform: translateY(20px);
-            transition: var(--transition);
+            transition: all 0.5s ease;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .result-section.show {
@@ -407,16 +353,22 @@
 
         .success-title {
             font-size: 2.2rem;
-            color: var(--text-color);
+            color: #ffffff;
             margin-bottom: 20px;
             font-weight: 500;
             letter-spacing: -0.5px;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 500;
         }
 
         .evaluation {
             font-size: 1.3rem;
             margin-bottom: 25px;
-            color: var(--text-secondary);
+            color: #cccccc;
+            font-weight: 300;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
 
@@ -432,26 +384,10 @@
             margin-top: 20px;
             opacity: 0;
             transform: translateY(20px);
-            transition: var(--transition);
+            transition: all 0.5s ease 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            /* 使用更通用的中文字体 */
-            font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
-        }
-
-        .story-text::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .story-text::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .story-text::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 3px;
+            /* 优化后的字体栈，特别确保中文显示 */
+            font-family: "SimHei", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "PingFang SC", sans-serif;
         }
 
         .story-text.show {
@@ -468,7 +404,7 @@
             display: inline-block;
             width: 2px;
             height: 1.2em;
-            background-color: var(--primary-color);
+            background-color: #a777e3;
             margin-left: 2px;
             animation: blink 1s infinite;
             vertical-align: middle;
@@ -484,12 +420,15 @@
         }
 
         .failure-message {
-            color: var(--accent-color);
+            color: #ff6b6b;
             font-size: 1.5rem;
             margin-top: 20px;
             opacity: 0;
             transform: translateY(20px);
-            transition: var(--transition);
+            transition: all 0.5s ease;
+            font-weight: 300;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
             font-weight: 300;
         }
 
@@ -505,30 +444,23 @@
             padding: 20px;
             border-radius: 12px;
             background: rgba(167, 119, 227, 0.1);
-            border-left: 4px solid var(--primary-color);
+            border-left: 4px solid #a777e3;
             font-size: 1.1rem;
-            color: var(--text-secondary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .quote::before {
-            content: '"';
-            position: absolute;
-            top: -10px;
-            left: 10px;
-            font-size: 4rem;
-            color: rgba(167, 119, 227, 0.2);
-            font-family: serif;
+            color: #cccccc;
+            /* 优化后的字体栈 */
+            font-family: "SimHei", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "PingFang SC", sans-serif;
         }
 
         .footer {
             margin-top: 30px;
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: #b0b0b0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            /* 优化后的字体栈 */
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+            font-weight: 300;
         }
 
         .ip-info {
@@ -539,7 +471,7 @@
 
         .wechat-id {
             font-size: 1rem;
-            color: var(--primary-color);
+            color: #a777e3;
             font-weight: 500;
         }
 
@@ -591,26 +523,15 @@
                 display: none;
             }
         }
-
-        /* 粒子容器 */
-        .particles-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
     </style>
 </head>
 <body>
-    <!-- 动态光效 -->
-    <div class="light-effect"></div>
-    <div class="light-effect"></div>
-    <div class="light-effect"></div>
-    
-    <!-- 粒子背景 -->
-    <div id="particles-js"></div>
+    <!-- 波浪背景 -->
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
     
     <!-- 电脑端光标 -->
     <div class="cursor"></div>
@@ -640,9 +561,6 @@
                 <i class="fas fa-redo"></i>
                 <span>剩余尝试次数：<span id="attempts-left">10</span></span>
             </div>
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar" style="width: 100%;"></div>
-            </div>
         </div>
         
         <div class="result-section" id="success-section">
@@ -667,9 +585,6 @@
         </div>
     </div>
 
-    <!-- 引入粒子效果库 -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const birthdayInput = document.querySelector('.birthday-input');
@@ -683,111 +598,21 @@
             const subtitleText = document.getElementById('subtitle-text');
             const musicPlayer = document.getElementById('musicPlayer');
             const bgMusic = document.getElementById('bgMusic');
-            const progressBar = document.getElementById('progress-bar');
             
             // 故事文本
             const storyContent = [
                 "感觉就是对我冷淡了",
+                "是谁不重要，知道的知道，不知道的也不必追究",
                 "这么久以来我都是这样觉得",
                 "而且我们没在一起多久，觉得在一起之后，她没有原来的热情了，而且不会主动找话题了，回答也变得简单了，见面时，我总会下意识地期待她能像最初那样，眼睛高兴地望过来。可她的目光常常轻飘飘地掠过我，落在远处的人或物上，仿佛我只是她视野里一个模糊的背景",
                 "有时候我比较的闲，就总会乱想。",
                 "跟她在一起，我很努力的给自己找话题，而且跟她在一起后我变得小心翼翼了，就怕惹到她一样。我把自己的喜怒哀乐完全系于她的一念之间，这份沉重的小心，这份越在意越害怕失去的惶恐，或许早已化成一种无形的压力，反而可能会给人家感觉不好吧",
-                "其实我应该让自己忙起来，别多想，别去揣测她，也许她在忙其实没有意识到对你冷漠了。又或者她其实习惯了一个人并没有考虑到我，我该主动一点，再耐心一点",
+                "其实我应该让自己忙起来，别多想，别去揣测她，也许她在忙其实没有意识到对我冷漠了。又或者她其实习惯了一个人并没有考虑到我，我该主动一点，再耐心一点",
                 "总之没有发生吵架或者什么，对我冷漠了，我可以主动找找她聊天。而且每个人都有不想说话的时候，都是很正常的，说不定可能过几天就好了呢，还是别去乱想什么就好了",
                 "<div class='quote'>\"恐有外人，令她倾心；更恐她心，系于旁人\"</div>",
                 "用在这里再合适不过了，我畏惧的，是她目光流转间，不经意映入了别人的身影，而我，终究只是她生命里一个仓促的过客。但是我现在能做的就是努力地不去多想，也不去怀疑她什么，在一起就好好的在一起，对她好，也相信她，有时候也去自己做些啥",
                 "也许...这就是故事的结局了——在一段看似平静的关系里，我所有的努力，所有的等待，都只是在等待她自己决定，是走近，还是最终转身离开。而我，连开口问一句\"你还喜欢我吗\"的勇气，都没有。"
             ];
-            
-            // 初始化粒子背景
-            particlesJS('particles-js', {
-                particles: {
-                    number: {
-                        value: 80,
-                        density: {
-                            enable: true,
-                            value_area: 800
-                        }
-                    },
-                    color: {
-                        value: "#a777e3"
-                    },
-                    shape: {
-                        type: "circle",
-                        stroke: {
-                            width: 0,
-                            color: "#000000"
-                        }
-                    },
-                    opacity: {
-                        value: 0.5,
-                        random: true,
-                        anim: {
-                            enable: true,
-                            speed: 1,
-                            opacity_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    size: {
-                        value: 3,
-                        random: true,
-                        anim: {
-                            enable: true,
-                            speed: 2,
-                            size_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    line_linked: {
-                        enable: true,
-                        distance: 150,
-                        color: "#6e8efb",
-                        opacity: 0.4,
-                        width: 1
-                    },
-                    move: {
-                        enable: true,
-                        speed: 2,
-                        direction: "none",
-                        random: true,
-                        straight: false,
-                        out_mode: "out",
-                        bounce: false,
-                        attract: {
-                            enable: false,
-                            rotateX: 600,
-                            rotateY: 1200
-                        }
-                    }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: {
-                        onhover: {
-                            enable: true,
-                            mode: "grab"
-                        },
-                        onclick: {
-                            enable: true,
-                            mode: "push"
-                        },
-                        resize: true
-                    },
-                    modes: {
-                        grab: {
-                            distance: 140,
-                            line_linked: {
-                                opacity: 1
-                            }
-                        },
-                        push: {
-                            particles_nb: 4
-                        }
-                    }
-                },
-                retina_detect: true
-            });
             
             // 音乐播放器控制
             let isPlaying = false;
@@ -862,25 +687,9 @@
                 localStorage.setItem('birthdayChallengeAttempts', attempts);
             }
             
-            // 更新进度条
-            function updateProgressBar() {
-                const progress = (attemptsLeft / 10) * 100;
-                progressBar.style.width = `${progress}%`;
-                
-                // 根据剩余次数改变颜色
-                if (progress <= 30) {
-                    progressBar.style.background = 'linear-gradient(90deg, var(--accent-color), #ff9e6d)';
-                } else if (progress <= 60) {
-                    progressBar.style.background = 'linear-gradient(90deg, #ffd166, var(--secondary-color))';
-                } else {
-                    progressBar.style.background = 'linear-gradient(90deg, var(--secondary-color), var(--primary-color))';
-                }
-            }
-            
             // 初始化
             attemptsLeft = getAttemptsFromStorage();
             attemptsLeftSpan.textContent = attemptsLeft;
-            updateProgressBar();
             
             submitBtn.addEventListener('click', checkBirthday);
             birthdayInput.addEventListener('keypress', function(e) {
@@ -934,7 +743,7 @@
                             setTimeout(typeNextParagraph, 1000);
                         } else {
                             storyContainer.appendChild(paragraph);
-                            typeWriter(storyContent[currentParagraph], paragraph, 30, function() {
+                            typeWriter(storyContent[currentParagraph], paragraph, 50, function() {
                                 currentParagraph++;
                                 setTimeout(typeNextParagraph, 500);
                             });
@@ -953,7 +762,6 @@
                 // 保存到localStorage（模拟IP记录）
                 saveAttemptsToStorage(attemptsLeft);
                 attemptsLeftSpan.textContent = attemptsLeft;
-                updateProgressBar();
                 
                 if (userInput === correctBirthday) {
                     // 正确答案
@@ -968,9 +776,9 @@
                         birthdayInput.focus();
                         
                         // 添加错误动画效果
-                        birthdayInput.style.borderColor = 'var(--accent-color)';
+                        birthdayInput.style.borderColor = '#ff6b6b';
                         setTimeout(() => {
-                            birthdayInput.style.borderColor = 'rgba(68, 68, 68, 0.5)';
+                            birthdayInput.style.borderColor = '#444444';
                         }, 500);
                     }
                 }
@@ -989,7 +797,6 @@
                 attemptsLeft = 10;
                 saveAttemptsToStorage(attemptsLeft);
                 attemptsLeftSpan.textContent = attemptsLeft;
-                updateProgressBar();
                 
                 // 隐藏输入区域
                 document.querySelector('.input-section').style.display = 'none';
