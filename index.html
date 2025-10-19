@@ -475,52 +475,161 @@
             font-weight: 500;
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 30px 20px;
-            }
-            
-            .welcome-text, .revealed-text {
-                font-size: 3rem;
-            }
-            
-            .input-container {
-                flex-direction: column;
-            }
-            
-            .birthday-input {
-                width: 100%;
-            }
-            
-            .submit-btn {
-                width: 100%;
-            }
-            
-            .footer {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .music-player {
-                top: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
-            }
-
-            .music-icon {
-                font-size: 20px;
-            }
-        }
-
         /* 移动端样式 */
         @media (max-width: 768px) {
             body {
+                padding: 15px;
                 cursor: default !important;
+                min-height: 100vh;
+                display: flex;
+                align-items: flex-start;
+                overflow-y: auto;
             }
             
             .cursor, .cursor-follower {
                 display: none;
+            }
+            
+            .container {
+                padding: 30px 20px;
+                border-radius: 20px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }
+            
+            .welcome-text, .revealed-text {
+                font-size: 2.8rem;
+                margin-bottom: 15px;
+                line-height: 1.2;
+            }
+            
+            .subtitle, .changed-subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 30px;
+                line-height: 1.4;
+            }
+            
+            .input-section {
+                margin-bottom: 25px;
+            }
+            
+            .input-label {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            
+            .input-container {
+                flex-direction: column;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .birthday-input {
+                width: 100%;
+                padding: 18px 20px;
+                font-size: 1.1rem;
+            }
+            
+            .submit-btn {
+                width: 100%;
+                padding: 18px;
+                font-size: 1.1rem;
+                font-weight: 500;
+            }
+            
+            .attempts-count {
+                font-size: 0.9rem;
+            }
+            
+            .result-section {
+                padding: 25px 20px;
+                margin-top: 25px;
+            }
+            
+            .success-title {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+            
+            .evaluation {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+                line-height: 1.5;
+            }
+            
+            .story-text {
+                padding: 20px;
+                max-height: 50vh;
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+            
+            .failure-message {
+                font-size: 1.3rem;
+                text-align: center;
+                line-height: 1.4;
+            }
+            
+            .quote {
+                padding: 15px;
+                font-size: 1rem;
+                margin: 20px 0;
+            }
+            
+            .footer {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 25px;
+                text-align: center;
+            }
+            
+            .music-player {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+
+            .music-icon {
+                font-size: 22px;
+            }
+            
+            /* 调整波浪背景在移动端的动画速度 */
+            .wave {
+                animation: wave 25s infinite linear;
+            }
+            
+            .wave:nth-child(2) {
+                animation: wave 30s infinite linear;
+            }
+            
+            .wave:nth-child(3) {
+                animation: wave 35s infinite linear;
+            }
+        }
+
+        /* 超小屏幕手机优化 */
+        @media (max-width: 400px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            .welcome-text, .revealed-text {
+                font-size: 2.4rem;
+            }
+            
+            .subtitle, .changed-subtitle {
+                font-size: 1rem;
+            }
+            
+            .story-text {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+            
+            .quote {
+                padding: 12px;
+                font-size: 0.9rem;
             }
         }
     </style>
