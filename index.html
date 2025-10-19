@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>想说的</title>
+    <title>小kの心里话</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -178,12 +178,26 @@
             color: #6e8efb;
         }
 
+        .music-player.loading .music-icon {
+            animation: pulse 1.5s ease-in-out infinite;
+            color: #a777e3;
+        }
+
         @keyframes rotate {
             from {
                 transform: rotate(0deg);
             }
             to {
                 transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
             }
         }
 
@@ -650,7 +664,7 @@
     <div class="music-player" id="musicPlayer">
         <i class="fas fa-music music-icon"></i>
     </div>
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop preload="auto">
         <!-- 这里需要替换为您的音乐文件路径 -->
         <source src="把回忆拼好给你.mp3" type="audio/mpeg">
         您的浏览器不支持音频元素。
@@ -711,9 +725,9 @@
             // 故事文本
             const storyContent = [
                 "感觉就是对我冷淡了",
-                "是谁不重要，知道的知道，不知道的也不必追究，有些人看完希望别乱说",
+                "是谁不重要，知道的知道，不知道的也不必追究，希望看完的人别乱说",
                 "这么久以来我都是这样觉得",
-                "而且我们没在一起多久，觉得在一起之后，她没有原来的热情了，而且不会主动找话题了，回答也变得简单了，见面时，我总会下意识地期待她能像最初那样，眼睛高兴地望过来。可她的目光常常轻飘飘地掠过我，落在远处的人或物上，仿佛我只是她视野里一个模糊的背景",
+                "而且我们没相处多久，觉得在相处之后，她没有原来的热情了，而且不会主动找话题了，回答也变得简单了，见面时，我总会下意识地期待她能像最初那样，眼睛高兴地望过来。可她的目光常常轻飘飘地掠过我，落在远处的人或物上，仿佛我只是她视野里一个模糊的背景",
                 "有时候我比较的闲，就总会乱想。",
                 "跟她在一起，我很努力的给自己找话题，而且跟她在一起后我变得小心翼翼了，就怕惹到她一样。我把自己的喜怒哀乐完全系于她的一念之间，这份沉重的小心，这份越在意越害怕失去的惶恐，或许早已化成一种无形的压力，反而可能会给人家感觉不好吧",
                 "其实我应该让自己忙起来，别多想，别去揣测她，也许她在忙其实没有意识到对我冷漠了。又或者她其实习惯了一个人并没有考虑到我，我该主动一点，再耐心一点",
@@ -725,18 +739,67 @@
             
             // 音乐播放器控制
             let isPlaying = false;
+            let isLoaded = false;
+            
+            // 预加载音乐
+            function preloadMusic() {
+                if (!isLoaded) {
+                    bgMusic.load();
+                    console.log("音乐预加载中...");
+                }
+            }
+            
+            // 页面加载后延迟预加载音乐
+            setTimeout(preloadMusic, 1000);
+            
+            // 用户交互时预加载音乐
+            document.addEventListener('click', function() {
+                if (!isLoaded) {
+                    preloadMusic();
+                }
+            }, { once: true });
             
             musicPlayer.addEventListener('click', function() {
-                if (isPlaying) {
+                if (!isLoaded) {
+                    // 显示加载状态
+                    musicPlayer.classList.add('loading');
+                    
+                    // 尝试播放
+                    bgMusic.play().then(() => {
+                        // 播放成功
+                        isPlaying = true;
+                        isLoaded = true;
+                        musicPlayer.classList.remove('loading');
+                        musicPlayer.classList.add('playing');
+                    }).catch(e => {
+                        console.log("播放失败:", e);
+                        // 加载失败，尝试预加载
+                        preloadMusic();
+                        
+                        // 显示提示
+                        musicPlayer.classList.remove('loading');
+                        musicPlayer.title = "点击重试播放音乐";
+                    });
+                } else if (isPlaying) {
                     bgMusic.pause();
                     musicPlayer.classList.remove('playing');
+                    isPlaying = false;
                 } else {
-                    bgMusic.play().catch(e => {
-                        console.log("自动播放被阻止，需要用户交互");
+                    bgMusic.play().then(() => {
+                        isPlaying = true;
+                        musicPlayer.classList.add('playing');
+                    }).catch(e => {
+                        console.log("播放失败:", e);
+                        musicPlayer.title = "点击重试播放音乐";
                     });
-                    musicPlayer.classList.add('playing');
                 }
-                isPlaying = !isPlaying;
+            });
+            
+            // 监听音频加载完成
+            bgMusic.addEventListener('canplaythrough', function() {
+                isLoaded = true;
+                musicPlayer.classList.remove('loading');
+                console.log("音乐已加载完成");
             });
             
             // 检测设备类型
