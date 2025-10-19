@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小kの心里话</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 波浪背景 */
+        .wave-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(30, 30, 30, 0.8) 0%, rgba(50, 50, 50, 0.6) 50%, rgba(30, 30, 30, 0.8) 100%);
+            border-radius: 40%;
+            animation: wave 15s infinite linear;
+        }
+
+        .wave:nth-child(2) {
+            bottom: 10px;
+            opacity: 0.5;
+            animation: wave 18s infinite linear;
+            animation-direction: reverse;
+        }
+
+        .wave:nth-child(3) {
+            bottom: 20px;
+            opacity: 0.3;
+            animation: wave 20s infinite linear;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+
+        /* 电脑端光标 */
+        .cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2),
+                        0 0 0 16px rgba(255, 255, 255, 0.1),
+                        0 0 0 24px rgba(255, 255, 255, 0.05);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s ease;
+        }
+
+        /* 移动端光晕效果 */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            padding: 50px 40px;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #6e8efb, #a777e3);
+            border-radius: 24px 24px 0 0;
+        }
+
+        /* 音乐播放器 */
+        .music-player {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .music-player:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .music-icon {
+            font-size: 24px;
+            color: #a777e3;
+            transition: all 0.3s ease;
+        }
+
+        .music-player.playing .music-icon {
+            animation: rotate 3s linear infinite;
+            color: #6e8efb;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .welcome-text {
+            font-size: 4.5rem;
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s ease forwards;
+            letter-spacing: -1px;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .revealed-text {
+            font-size: 3rem;
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+            font-weight: 300;
+            letter-spacing: -0.2px;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .changed-subtitle {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: -0.2px;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 18px;
+            font-size: 1.1rem;
+            color: #cccccc;
+            font-weight: 300;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .birthday-input {
+            width: 180px;
+            padding: 16px 20px;
+            border: 2px solid #444444;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            outline: none;
+            text-align: center;
+            background: rgba(40, 40, 40, 0.7);
+            color: #ffffff;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .birthday-input:focus {
+            border-color: #a777e3;
+            box-shadow: 0 0 0 4px rgba(167, 119, 227, 0.2);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .attempts-count {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #b0b0b0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 18px;
+            background: rgba(40, 40, 40, 0.6);
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-section.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .success-title {
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .evaluation {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: #cccccc;
+            font-weight: 300;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .story-text {
+            text-align: left;
+            line-height: 1.7;
+            color: #e0e0e0;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 25px;
+            border-radius: 14px;
+            background: rgba(30, 30, 30, 0.7);
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: "SimHei", "Microsoft YaHei", sans-serif;
+        }
+
+        .story-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 打字机效果 */
+        .typed-text {
+            display: inline;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #a777e3;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 50% {
+                opacity: 1;
+            }
+            51%, 100% {
+                opacity: 0;
+            }
+        }
+
+        .failure-message {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            font-weight: 300;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .failure-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quote {
+            font-style: italic;
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(167, 119, 227, 0.1);
+            border-left: 4px solid #a777e3;
+            font-size: 1.1rem;
+            color: #cccccc;
+            font-family: "SimHei", "Microsoft YaHei", sans-serif;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: "PingFang SC Light", "Microsoft YaHei UI Light", sans-serif;
+        }
+
+        .ip-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wechat-id {
+            font-size: 1rem;
+            color: #a777e3;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .welcome-text, .revealed-text {
+                font-size: 3rem;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+            
+            .birthday-input {
+                width: 100%;
+            }
+            
+            .submit-btn {
+                width: 100%;
+            }
+            
+            .footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .music-player {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .music-icon {
+                font-size: 20px;
+            }
+        }
+
+        /* 移动端样式 */
+        @media (max-width: 768px) {
+            body {
+                cursor: default !important;
+            }
+            
+            .cursor, .cursor-follower {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 波浪背景 -->
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <!-- 电脑端光标 -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player" id="musicPlayer">
+        <i class="fas fa-music music-icon"></i>
+    </div>
+    <audio id="bgMusic" loop>
+        <!-- 这里需要替换为您的音乐文件路径 -->
+        <source src="把回忆拼好给你.mp3" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+
+    <div class="container">
+        <h1 class="welcome-text" id="main-title">Hi，欢迎</h1>
+        <p class="subtitle" id="subtitle-text">猜猜我的生日是什么时候？</p>
+        
+        <div class="input-section">
+            <label class="input-label">请输入我的生日（格式：月.日）</label>
+            <div class="input-container">
+                <input type="text" class="birthday-input" placeholder="例如：1.1">
+                <button class="submit-btn">提交</button>
+            </div>
+            <div class="attempts-count">
+                <i class="fas fa-redo"></i>
+                <span>剩余尝试次数：<span id="attempts-left">10</span></span>
+            </div>
+        </div>
+        
+        <div class="result-section" id="success-section">
+            <h2 class="success-title">恭喜你答对了！</h2>
+            <p class="evaluation" id="evaluation-text"></p>
+            <div class="story-text" id="story-text">
+                <!-- 打字机效果将在这里动态生成 -->
+            </div>
+        </div>
+        
+        <div class="failure-message" id="failure-message">
+            <i class="fas fa-times-circle"></i> 你还是不了解我...你可以走了...
+        </div>
+        
+        <div class="footer">
+            <div class="ip-info">
+                <i class="fas fa-network-wired"></i>
+                <span>IP记录已启用</span>
+            </div>
+            <div class="wechat-id">微信号：kirinxuanyyds</div>
+            <div>小kの心里话 ? 2025</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const birthdayInput = document.querySelector('.birthday-input');
+            const submitBtn = document.querySelector('.submit-btn');
+            const attemptsLeftSpan = document.getElementById('attempts-left');
+            const successSection = document.getElementById('success-section');
+            const evaluationText = document.getElementById('evaluation-text');
+            const storyText = document.getElementById('story-text');
+            const failureMessage = document.getElementById('failure-message');
+            const mainTitle = document.getElementById('main-title');
+            const subtitleText = document.getElementById('subtitle-text');
+            const musicPlayer = document.getElementById('musicPlayer');
+            const bgMusic = document.getElementById('bgMusic');
+            
+            // 故事文本
+            const storyContent = [
+                "感觉就是对我冷淡了",
+                "是谁不重要，知道的知道，不知道的也不必追究",
+                "这么久以来我都是这样觉得",
+                "而且我们没在一起多久，觉得在一起之后，她没有原来的热情了，而且不会主动找话题了，回答也变得简单了，见面时，我总会下意识地期待她能像最初那样，眼睛高兴地望过来。可她的目光常常轻飘飘地掠过我，落在远处的人或物上，仿佛我只是她视野里一个模糊的背景",
+                "有时候我比较的闲，就总会乱想。",
+                "跟她在一起，我很努力的给自己找话题，而且跟她在一起后我变得小心翼翼了，就怕惹到她一样。我把自己的喜怒哀乐完全系于她的一念之间，这份沉重的小心，这份越在意越害怕失去的惶恐，或许早已化成一种无形的压力，反而可能会给人家感觉不好吧",
+                "其实我应该让自己忙起来，别多想，别去揣测她，也许她在忙其实没有意识到对我冷漠了。又或者她其实习惯了一个人并没有考虑到我，我该主动一点，再耐心一点",
+                "总之没有发生吵架或者什么，对我冷漠了，我可以主动找找她聊天。而且每个人都有不想说话的时候，都是很正常的，说不定可能过几天就好了呢，还是别去乱想什么就好了",
+                "<div class='quote'>\"恐有外人，令她倾心；更恐她心，系于旁人\"</div>",
+                "用在这里再合适不过了，我畏惧的，是她目光流转间，不经意映入了别人的身影，而我，终究只是她生命里一个仓促的过客。但是我现在能做的就是努力地不去多想，也不去怀疑她什么，在一起就好好的在一起，对她好，也相信她，有时候也去自己做些啥",
+                "也许...这就是故事的结局了——在一段看似平静的关系里，我所有的努力，所有的等待，都只是在等待她自己决定，是走近，还是最终转身离开。而我，连开口问一句\"你还喜欢我吗\"的勇气，都没有。"
+            ];
+            
+            // 音乐播放器控制
+            let isPlaying = false;
+            
+            musicPlayer.addEventListener('click', function() {
+                if (isPlaying) {
+                    bgMusic.pause();
+                    musicPlayer.classList.remove('playing');
+                } else {
+                    bgMusic.play().catch(e => {
+                        console.log("自动播放被阻止，需要用户交互");
+                    });
+                    musicPlayer.classList.add('playing');
+                }
+                isPlaying = !isPlaying;
+            });
+            
+            // 检测设备类型
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            // 电脑端光标
+            if (!isMobile) {
+                const cursor = document.querySelector('.cursor');
+                const cursorFollower = document.querySelector('.cursor-follower');
+                
+                document.addEventListener('mousemove', (e) => {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                    
+                    setTimeout(() => {
+                        cursorFollower.style.left = e.clientX + 'px';
+                        cursorFollower.style.top = e.clientY + 'px';
+                    }, 100);
+                });
+            }
+            
+            // 移动端光晕效果
+            if (isMobile) {
+                document.addEventListener('touchstart', function(e) {
+                    const touch = e.touches[0];
+                    const ripple = document.createElement('div');
+                    ripple.className = 'ripple';
+                    document.body.appendChild(ripple);
+                    
+                    const size = Math.max(document.documentElement.clientWidth, document.documentElement.clientHeight) / 4;
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = (touch.clientX - size/2) + 'px';
+                    ripple.style.top = (touch.clientY - size/2) + 'px';
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            }
+            
+            // 初始化尝试次数
+            let attemptsLeft = 10;
+            let attemptsCount = 0;
+            const correctBirthday = '5.15';
+            
+            // 从localStorage获取尝试次数（模拟IP记录）
+            function getAttemptsFromStorage() {
+                const storedAttempts = localStorage.getItem('birthdayChallengeAttempts');
+                if (storedAttempts) {
+                    return parseInt(storedAttempts);
+                }
+                return 10; // 默认10次
+            }
+            
+            // 保存尝试次数到localStorage（模拟IP记录）
+            function saveAttemptsToStorage(attempts) {
+                localStorage.setItem('birthdayChallengeAttempts', attempts);
+            }
+            
+            // 初始化
+            attemptsLeft = getAttemptsFromStorage();
+            attemptsLeftSpan.textContent = attemptsLeft;
+            
+            submitBtn.addEventListener('click', checkBirthday);
+            birthdayInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkBirthday();
+                }
+            });
+            
+            // 打字机效果
+            function typeWriter(text, element, speed, callback) {
+                let i = 0;
+                element.innerHTML = '';
+                
+                function type() {
+                    if (i < text.length) {
+                        // 处理HTML标签
+                        if (text.substring(i, i+4) === '<div') {
+                            // 找到完整的div标签
+                            const endIndex = text.indexOf('</div>', i) + 6;
+                            if (endIndex > i) {
+                                element.innerHTML += text.substring(i, endIndex);
+                                i = endIndex;
+                                setTimeout(type, speed * 3); // 标签之间稍长停顿
+                            }
+                        } else {
+                            element.innerHTML += text.charAt(i);
+                            i++;
+                            setTimeout(type, speed);
+                        }
+                    } else if (callback) {
+                        setTimeout(callback, 500);
+                    }
+                }
+                
+                type();
+            }
+            
+            // 显示故事文本
+            function showStoryText() {
+                const storyContainer = document.getElementById('story-text');
+                let currentParagraph = 0;
+                
+                function typeNextParagraph() {
+                    if (currentParagraph < storyContent.length) {
+                        const paragraph = document.createElement('p');
+                        if (storyContent[currentParagraph].includes('<div')) {
+                            // 处理引用块
+                            paragraph.innerHTML = storyContent[currentParagraph];
+                            storyContainer.appendChild(paragraph);
+                            currentParagraph++;
+                            setTimeout(typeNextParagraph, 1000);
+                        } else {
+                            storyContainer.appendChild(paragraph);
+                            typeWriter(storyContent[currentParagraph], paragraph, 50, function() {
+                                currentParagraph++;
+                                setTimeout(typeNextParagraph, 500);
+                            });
+                        }
+                    }
+                }
+                
+                typeNextParagraph();
+            }
+            
+            function checkBirthday() {
+                const userInput = birthdayInput.value.trim();
+                attemptsCount++;
+                attemptsLeft--;
+                
+                // 保存到localStorage（模拟IP记录）
+                saveAttemptsToStorage(attemptsLeft);
+                attemptsLeftSpan.textContent = attemptsLeft;
+                
+                if (userInput === correctBirthday) {
+                    // 正确答案
+                    showSuccess();
+                } else {
+                    // 错误答案
+                    if (attemptsLeft <= 0) {
+                        showFailure();
+                    } else {
+                        // 清空输入框，让用户重新输入
+                        birthdayInput.value = '';
+                        birthdayInput.focus();
+                        
+                        // 添加错误动画效果
+                        birthdayInput.style.borderColor = '#ff6b6b';
+                        setTimeout(() => {
+                            birthdayInput.style.borderColor = '#444444';
+                        }, 500);
+                    }
+                }
+            }
+            
+            function showSuccess() {
+                // 更改主标题
+                mainTitle.textContent = "这是我一直想说的";
+                mainTitle.className = "revealed-text";
+                
+                // 更改副标题
+                subtitleText.textContent = "看看吧";
+                subtitleText.className = "changed-subtitle";
+                
+                // 重置尝试次数为10次
+                attemptsLeft = 10;
+                saveAttemptsToStorage(attemptsLeft);
+                attemptsLeftSpan.textContent = attemptsLeft;
+                
+                // 隐藏输入区域
+                document.querySelector('.input-section').style.display = 'none';
+                
+                // 设置评价文本
+                let evaluation = '';
+                if (attemptsCount === 1) {
+                    evaluation = '太棒了！你一次就答对了！你真的很了解我！';
+                } else if (attemptsCount <= 3) {
+                    evaluation = `你用了${attemptsCount}次就答对了，很不错哦！`;
+                } else if (attemptsCount <= 6) {
+                    evaluation = `你用了${attemptsCount}次才答对，还需要多了解我一点哦~`;
+                } else {
+                    evaluation = `你用了${attemptsCount}次才答对，差点就要失去机会了！`;
+                }
+                evaluationText.textContent = evaluation;
+                
+                // 显示成功区域
+                setTimeout(() => {
+                    successSection.classList.add('show');
+                    
+                    // 延迟显示故事文本
+                    setTimeout(() => {
+                        storyText.classList.add('show');
+                        // 启动打字机效果
+                        showStoryText();
+                    }, 500);
+                }, 300);
+            }
+            
+            function showFailure() {
+                // 隐藏输入区域
+                document.querySelector('.input-section').style.display = 'none';
+                
+                // 显示失败消息
+                setTimeout(() => {
+                    failureMessage.classList.add('show');
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>
