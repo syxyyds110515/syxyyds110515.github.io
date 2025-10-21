@@ -605,6 +605,41 @@
             font-weight: 500;
         }
 
+        /* 彩蛋特效样式 */
+        .easter-egg-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+            pointer-events: none;
+            display: none;
+        }
+
+        .easter-egg-particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .easter-egg-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 3rem;
+            text-align: center;
+            opacity: 0;
+            z-index: 100000;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Helvetica Neue", Arial, sans-serif;
+        }
+
         /* 移动端样式 */
         @media (max-width: 768px) {
             body {
@@ -769,6 +804,12 @@
             .danmu-item {
                 font-size: 12px;
             }
+
+            /* 移动端彩蛋消息调整 */
+            .easter-egg-message {
+                font-size: 2rem;
+                padding: 0 20px;
+            }
         }
 
         /* 超小屏幕手机优化 */
@@ -824,6 +865,10 @@
     <!-- 电脑端光标 -->
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
+
+    <!-- 彩蛋特效 -->
+    <div class="easter-egg-effect" id="easterEggEffect"></div>
+    <div class="easter-egg-message" id="easterEggMessage"></div>
 
     <!-- 主内容区域 -->
     <div class="main-content">
@@ -909,6 +954,8 @@
             const danmuContainer = document.getElementById('danmuContainer');
             const danmuInput = document.getElementById('danmuInput');
             const danmuSendBtn = document.getElementById('danmuSendBtn');
+            const easterEggEffect = document.getElementById('easterEggEffect');
+            const easterEggMessage = document.getElementById('easterEggMessage');
             
             // 访客计数
             let visitorCount = 44;
@@ -1116,6 +1163,121 @@
                 }
             });
             
+            // 小彩蛋功能
+            let easterEggTriggered = false;
+            danmuInput.addEventListener('input', function() {
+                // 检查输入框内容是否为"zyr0502"
+                if (this.value.toLowerCase() === 'zyr0502' && !easterEggTriggered) {
+                    easterEggTriggered = true;
+                    triggerEasterEgg();
+                }
+            });
+            
+            // 触发彩蛋特效
+            function triggerEasterEgg() {
+                // 清空输入框
+                danmuInput.value = '';
+                
+                // 显示特效容器
+                easterEggEffect.style.display = 'block';
+                
+                // 创建粒子效果
+                createParticleEffect();
+                
+                // 显示彩蛋消息
+                showEasterEggMessage();
+                
+                // 播放音效（如果有的话）
+                // playEasterEggSound();
+            }
+            
+            // 创建粒子效果
+            function createParticleEffect() {
+                const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#6B48FF', '#FF9F45'];
+                const particleCount = 150;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'easter-egg-particle';
+                    
+                    // 随机颜色
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.backgroundColor = color;
+                    
+                    // 随机位置
+                    const startX = Math.random() * 100;
+                    const startY = Math.random() * 100;
+                    particle.style.left = `${startX}%`;
+                    particle.style.top = `${startY}%`;
+                    
+                    // 随机大小
+                    const size = Math.random() * 20 + 5;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    easterEggEffect.appendChild(particle);
+                    
+                    // 动画效果
+                    animateParticle(particle, startX, startY);
+                }
+            }
+            
+            // 粒子动画
+            function animateParticle(particle, startX, startY) {
+                // 随机目标位置
+                const targetX = startX + (Math.random() - 0.5) * 100;
+                const targetY = startY + (Math.random() - 0.5) * 100;
+                
+                // 随机动画时间
+                const duration = Math.random() * 3 + 2;
+                
+                // 设置动画
+                particle.style.transition = `all ${duration}s ease-out`;
+                particle.style.opacity = '1';
+                
+                setTimeout(() => {
+                    particle.style.left = `${targetX}%`;
+                    particle.style.top = `${targetY}%`;
+                    particle.style.transform = `scale(0)`;
+                    particle.style.opacity = '0';
+                }, 10);
+                
+                // 动画结束后移除粒子
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, duration * 1000 + 100);
+            }
+            
+            // 显示彩蛋消息
+            function showEasterEggMessage() {
+                const messages = [
+                    "哇！你发现了小彩蛋！",
+                    "这是一个隐藏的秘密！",
+                    "你好厉害，这都被你发现了！",
+                    "恭喜解锁隐藏内容！"
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                easterEggMessage.textContent = randomMessage;
+                
+                // 显示消息
+                setTimeout(() => {
+                    easterEggMessage.style.opacity = '1';
+                    easterEggMessage.style.transition = 'opacity 1s ease';
+                }, 500);
+                
+                // 3秒后隐藏消息和特效
+                setTimeout(() => {
+                    easterEggMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        easterEggEffect.style.display = 'none';
+                        easterEggTriggered = false;
+                    }, 1000);
+                }, 3000);
+            }
+            
             // 初始化尝试次数
             let attemptsLeft = 10;
             let attemptsCount = 0;
@@ -1244,7 +1406,7 @@
                 // 重置尝试次数为10次
                 attemptsLeft = 10;
                 saveAttemptsToStorage(attemptsLeft);
-attemptsLeftSpan.textContent = attemptsLeft;
+                attemptsLeftSpan.textContent = attemptsLeft;
                 
                 // 隐藏输入区域
                 document.querySelector('.input-section').style.display = 'none';
