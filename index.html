@@ -960,16 +960,17 @@
             // 访客计数
             let visitorCount = 44;
             
-            // 初始化访客计数
+            // 修复访客计数问题：每次页面加载都会增加访客数
             function initVisitorCount() {
+                // 使用localStorage存储访客数
                 const storedCount = localStorage.getItem('visitorCount');
                 if (storedCount) {
                     visitorCount = parseInt(storedCount);
-                } else {
-                    // 如果是新访客，增加计数
-                    visitorCount++;
-                    localStorage.setItem('visitorCount', visitorCount.toString());
                 }
+                
+                // 每次页面加载都增加访客数
+                visitorCount++;
+                localStorage.setItem('visitorCount', visitorCount.toString());
                 visitorCountSpan.textContent = visitorCount;
             }
             
@@ -1187,8 +1188,10 @@
                 // 显示彩蛋消息
                 showEasterEggMessage();
                 
-                // 播放音效（如果有的话）
-                // playEasterEggSound();
+                // 立即跳转到secret.html，不等待文字输入完
+                setTimeout(() => {
+                    window.location.href = 'secret.html';
+                }, 1500);
             }
             
             // 创建粒子效果
@@ -1268,14 +1271,13 @@
                     easterEggMessage.style.transition = 'opacity 1s ease';
                 }, 500);
                 
-                // 3秒后隐藏消息和特效
+                // 1.5秒后隐藏消息和特效（页面即将跳转）
                 setTimeout(() => {
                     easterEggMessage.style.opacity = '0';
                     setTimeout(() => {
                         easterEggEffect.style.display = 'none';
-                        easterEggTriggered = false;
                     }, 1000);
-                }, 3000);
+                }, 1500);
             }
             
             // 初始化尝试次数
