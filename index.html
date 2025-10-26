@@ -13,13 +13,10 @@
         }
         
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            overflow: hidden;
-            padding: 20px;
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #333;
         }
         
         .wave-container {
@@ -73,38 +70,165 @@
             }
         }
         
-        .login-container {
-            width: 100%;
-            max-width: 400px;
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+        
+        nav a:hover {
+            color: #000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 0;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: #000;
+            text-align: center;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .blog-card {
             background: white;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(to right, #000, #333);
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
         }
         
-        h1 {
+        .blog-card-content {
+            padding: 25px;
+        }
+        
+        .blog-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
             color: #000;
-            font-size: 28px;
+            line-height: 1.4;
+        }
+        
+        .blog-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .blog-card .meta {
+            display: flex;
+            justify-content: space-between;
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            display: inline-block;
+            color: #000;
             font-weight: 600;
-            margin-bottom: 30px;
-            letter-spacing: 0.5px;
+            text-decoration: none;
+            border-bottom: 2px solid #000;
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .read-more:hover {
+            color: #333;
+            border-color: #333;
+        }
+        
+        .login-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto 60px;
+            text-align: center;
+        }
+        
+        .login-section h2 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #000;
         }
         
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: left;
         }
         
@@ -144,6 +268,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-bottom: 15px;
         }
         
         button:hover {
@@ -161,25 +286,6 @@
             color: #e74c3c;
             font-size: 14px;
             min-height: 20px;
-        }
-        
-        .divider {
-            margin: 30px 0;
-            height: 1px;
-            background: #eee;
-            position: relative;
-        }
-        
-        .divider::before {
-            content: '或';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 0 15px;
-            color: #999;
-            font-size: 14px;
         }
         
         .prank-section {
@@ -202,12 +308,61 @@
             background: #5a6268;
         }
         
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 20px;
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 15px 0;
             }
             
-            h1 {
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-section {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .section-title {
                 font-size: 24px;
             }
             
@@ -224,24 +379,92 @@
         <div class="wave"></div>
     </div>
     
-    <div class="login-container">
-        <h1>KirinXuanの小站</h1>
-        <form id="login-form">
-            <div class="input-group">
-                <label for="password">访问密码</label>
-                <input type="password" id="password" placeholder="请输入密码" autocomplete="off">
-            </div>
-            <button type="submit">进入</button>
-            <div class="message" id="message"></div>
-        </form>
-        
-        <div class="prank-section">
-            <div class="prank-text">整蛊一下好友？</div>
-            <button id="prank-btn" class="prank-btn">短信轰炸</button>
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">KirinXuanの小站</a>
+            <nav>
+                <ul>
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#blog">博客</a></li>
+                    <li><a href="#about">关于</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
+    
+    <div class="container">
+        <section class="hero">
+            <h1>KirinXuanの小站</h1>
+            <p>技术分享 | 生活记录 | 创意实验</p>
+        </section>
+        
+        <section id="blog">
+            <h2 class="section-title">最新博文</h2>
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="blog-card-content">
+                        <div class="meta">
+                            <span>技术教程</span>
+                            <span>2024年3月15日</span>
+                        </div>
+                        <h3>如何在本地部署DeepSeek-R1蒸馏模型？</h3>
+                        <p>本文章以windows系统为基础写的教程，其他系统用户请移步。作为一名技术爱好者，今天我来分享一下如何在本地部署DeepSeek-R1蒸馏模型...</p>
+                        <a href="blog-deepseek-r1.html" class="read-more">阅读全文</a>
+                    </div>
+                </div>
+                
+                <div class="blog-card">
+                    <div class="blog-card-content">
+                        <div class="meta">
+                            <span>技术教程</span>
+                            <span>2024年3月10日</span>
+                        </div>
+                        <h3>使用Ollama简化AI模型部署</h3>
+                        <p>探索如何使用Ollama框架简化各种AI模型的本地部署过程，提高开发效率...</p>
+                        <a href="#" class="read-more">阅读全文</a>
+                    </div>
+                </div>
+                
+                <div class="blog-card">
+                    <div class="blog-card-content">
+                        <div class="meta">
+                            <span>生活记录</span>
+                            <span>2024年3月5日</span>
+                        </div>
+                        <h3>我的2024年技术学习计划</h3>
+                        <p>分享我在2024年计划学习的技术栈和项目规划，包括AI、Web开发和系统设计...</p>
+                        <a href="#" class="read-more">阅读全文</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="login-section">
+            h2>访问私密内容</h2>
+             
+                <头 >="input-group">
+                    <meta charset="UTF-8">访问密码</label>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" >="请输入密码" autocomplete="off">
+                
+                <样式 >="submit">进入小站</button>
+        *  {div class="message" id="message"></div>
+            form>
+            
+            盒模型div：边框盒;"prank-section">
+                div>div>
+                }button id="prank-btn" class="prank-btn">短信轰炸</button>
+            </div>
+        section>
+    div>
+    
+    footer>
+        最小高度div：100=vh>
+            p>
+            溢出：隐藏p>p>
+        div>
+    }footer>
 
-    <script>
+script>
         // 处理登录表单提交
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -251,7 +474,7 @@
             if (password === 'zyr0502') {
                 message.textContent = '密码正确，正在跳转...';
                 message.style.color = '#2ecc71';
-                setTimeout(() => {
+setTimeout(() => {
                     window.location.href = 'secret.html';
                 }, 1000);
             } else {
@@ -268,4 +491,4 @@
         });
     </script>
 </body>
-</html>
+                </html>
