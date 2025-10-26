@@ -5,6 +5,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 添加以下代码来保护源码 -->
+    <script>
+    // 禁止右键菜单
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    
+    // 禁止F12和开发者工具
+    document.onkeydown = function(e) {
+        if (e.keyCode == 123) { // F12
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+            return false;
+        }
+        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+            return false;
+        }
+    }
+    
+    // 检测开发者工具
+    setInterval(function() {
+        const before = new Date();
+        debugger;
+        const after = new Date();
+        if (after - before > 100) {
+            document.body.innerHTML = '<h1>禁止查看源码！</h1>';
+        }
+    }, 1000);
+    </script>
+    <!-- 保护代码结束 -->
     <title>短信轰炸</title>
     <style>
         body {
