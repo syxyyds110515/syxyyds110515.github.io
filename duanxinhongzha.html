@@ -40,6 +40,7 @@
 .logo {
     width: 120px;  /* Adjust the width of the logo */
     height: auto;  /* Maintain aspect ratio */
+    border-radius: 50%;  /* 添加这行：将图片变成圆形 */
 }
 
 input[type="text"], input[type="number"], #generatedUrl {
@@ -48,13 +49,13 @@ input[type="text"], input[type="number"], #generatedUrl {
     font-size: 16px;
     margin-bottom: 10px;
     border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 15px;
     box-sizing: border-box;
 }
 
 button {
     padding: 10px 20px;
-    font-size: 18px;
+    font-size: 15px;
     color: white;
     background-color: #007bff;
     border: none;
@@ -78,7 +79,7 @@ button:hover {
 .card {
     background-color: #ffffff;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 15px;
     width: 80%;  /* Adjust the width of the card */
     padding: 20px;
     box-sizing: border-box;
@@ -4204,7 +4205,7 @@ button:hover {
     // 等待所有请求完成后，显示结果
     Promise.all(requestPromises).finally(() => {
         // 所有请求完成后，弹出统计信息
-        var userResponse = confirm(`轰炸完成！\n成功：${successCount} 条\n失败：${failureCount} 条\nCopyright 正义社工©`);
+        var userResponse = confirm(`轰炸完成！\n成功：${successCount} 条\n失败：${failureCount} 条\nCopyright KirinXuan 2025©`);
         if (userResponse) {
             // 用户点击了“确定”
         } else {
