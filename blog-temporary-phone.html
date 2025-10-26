@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>临时手机号，保护隐私 | KirinXuanの小站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 15%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 45%;
+            animation: wave 15s infinite linear;
+            transform-origin: 50% 50%;
+        }
+        
+        .wave:nth-child(1) {
+            animation-delay: 0s;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            background: rgba(255, 255, 255, 0.2);
+            height: 12%;
+        }
+        
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            background: rgba(255, 255, 255, 0.1);
+            height: 10%;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+        
+        nav a:hover {
+            color: #000;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .article-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .article-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .article-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 50px;
+            margin-bottom: 40px;
+        }
+        
+        .article-content h2 {
+            font-size: 24px;
+            margin: 30px 0 15px;
+            color: #000;
+        }
+        
+        .article-content h3 {
+            font-size: 20px;
+            margin: 25px 0 12px;
+            color: #333;
+        }
+        
+        .article-content p {
+            margin-bottom: 20px;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .article-content li {
+            margin-bottom: 8px;
+        }
+        
+        .article-content a {
+            color: #000;
+            text-decoration: none;
+            border-bottom: 1px solid #000;
+            transition: all 0.3s ease;
+        }
+        
+        .article-content a:hover {
+            color: #333;
+            border-color: #333;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #000;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #333;
+            border-color: #333;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+        
+        .wx-info {
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .article-title {
+                font-size: 28px;
+            }
+            
+            .article-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">KirinXuanの小站</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="index.html#blog">博客</a></li>
+                    <li><a href="index.html#about">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回首页</a>
+        
+        <div class="article-header">
+            <h1 class="article-title">临时手机号，保护隐私</h1>
+            <div class="article-meta">
+                <span>隐私安全 • 2024年3月18日</span>
+            </div>
+        </div>
+        
+        <div class="article-content">
+            <h2>临时手机号有什么用？</h2>
+            <p>有时候注册某些服务必须提供手机号，但你又不想使用你常用的手机号，因为你不想收到不必要的垃圾短信。</p>
+            <p>又有些时候你只是想试用一次某些服务，你不想使用常用手机号注册。</p>
+            <p>临时手机号应运而生，在注册这些不重要的服务时使用临时手机号作为替身是个很好的选择。</p>
+            <p>临时手机号具有匿名性，能有效减少垃圾短信。</p>
+            
+            <h2>推荐好用的国内外免费短信接码平台</h2>
+            <p>这里我给大家推荐一些好用的国内外免费短信接码平台：</p>
+            <ol>
+                <li><a href="https://smsreceivefree.com" target="_blank">SMS Receive Free</a>：https://smsreceivefree.com</li>
+                <li><a href="https://yunjiema.net" target="_blank">云接码</a>：https://yunjiema.net</li>
+                <li><a href="http://www.xnsms.com" target="_blank">小鸟接码</a>：http://www.xnsms.com</li>
+                <li><a href="https://jiemahao.com" target="_blank">接码号</a>：https://jiemahao.com</li>
+                <li><a href="https://www.shejiinn.com" target="_blank">shejiinn</a>：https://www.shejiinn.com</li>
+                <li><a href="https://www.mffac.com" target="_blank">mffac</a>：https://www.mffac.com</li>
+                <li><a href="https://yunduanxin.net" target="_blank">云短信</a>：https://yunduanxin.net</li>
+                <li><a href="https://mianfeijiema.com" target="_blank">免费接码</a>：https://mianfeijiema.com</li>
+                <li><a href="https://freephonenum.com" target="_blank">FreePhoneNum</a>：https://freephonenum.com</li>
+                <li><a href="https://www.zusms.com" target="_blank">ZUSMS</a>：https://www.zusms.com</li>
+                <li><a href="https://www.freeonlinephone.org" target="_blank">Free Online Phone</a>：https://www.freeonlinephone.org</li>
+                <li><a href="https://receiveasms.com" target="_blank">receiveasms</a>：https://receiveasms.com</li>
+                <li><a href="https://www.materialtools.com" target="_blank">materialtools</a>：https://www.materialtools.com</li>
+                <li><a href="https://www.receivesmsonline.net" target="_blank">receivesmsonline</a>：https://www.receivesmsonline.net</li>
+                <li><a href="http://receive-sms-online.com" target="_blank">Receive SMS Online</a>：http://receive-sms-online.com</li>
+                <li><a href="https://www.micsms.com" target="_blank">MICSMS</a>：https://www.micsms.com</li>
+                <li><a href="https://www.yinsiduanxin.com" target="_blank">隐私短信</a>：https://www.yinsiduanxin.com</li>
+                <li><a href="https://www.becmd.com" target="_blank">becmd</a>：https://www.becmd.com</li>
+                <li><a href="http://www.z-sms.com" target="_blank">z-sms</a>：http://www.z-sms.com</li>
+                <li><a href="https://www.suiyongsuiqi.com" target="_blank">随用随弃</a>：https://www.suiyongsuiqi.com</li>
+                <li><a href="https://www.we39.cn" target="_blank">we39</a>：https://www.we39.cn</li>
+                <li><a href="https://sms-activate.io" target="_blank">sms activate</a>：https://sms-activate.io</li>
+            </ol>
+            
+            <h2>使用建议</h2>
+            <p>在选择临时手机号平台时，请注意以下几点：</p>
+            <ul>
+                <li>优先选择声誉良好、用户评价高的平台</li>
+                <li>注意平台是否支持您需要注册的服务</li>
+                <li>对于重要账号，建议还是使用真实手机号</li>
+                <li>不要使用临时手机号注册涉及金融、支付等重要服务</li>
+                <li>定期更换使用的临时手机号平台，分散风险</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 KirinXuanの小站 - 保留所有权利</p>
+            <p class="wx-info">wx：kirinxuanyyds</p>
+        </div>
+    </footer>
+</body>
+</html>
