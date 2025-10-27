@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科学上网翻墙教程 | KirinXuanの小站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 15%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 45%;
+            animation: wave 15s infinite linear;
+            transform-origin: 50% 50%;
+        }
+        
+        .wave:nth-child(1) {
+            animation-delay: 0s;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            background: rgba(255, 255, 255, 0.2);
+            height: 12%;
+        }
+        
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            background: rgba(255, 255, 255, 0.1);
+            height: 10%;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+        
+        nav a:hover {
+            color: #000;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .article-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .article-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .article-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 50px;
+            margin-bottom: 40px;
+        }
+        
+        .article-content h2 {
+            font-size: 24px;
+            margin: 40px 0 20px;
+            color: #000;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .article-content h2:first-child {
+            margin-top: 0;
+        }
+        
+        .article-content h3 {
+            font-size: 20px;
+            margin: 30px 0 15px;
+            color: #333;
+        }
+        
+        .article-content p {
+            margin-bottom: 20px;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .article-content li {
+            margin-bottom: 10px;
+        }
+        
+        .article-content a {
+            color: #000;
+            text-decoration: none;
+            border-bottom: 1px solid #000;
+            transition: all 0.3s ease;
+        }
+        
+        .article-content a:hover {
+            color: #333;
+            border-color: #333;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #000;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #333;
+            border-color: #333;
+        }
+        
+        .vpn-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .vpn-table thead tr {
+            background-color: #000;
+            color: #ffffff;
+            text-align: left;
+        }
+        
+        .vpn-table th,
+        .vpn-table td {
+            padding: 12px 15px;
+        }
+        
+        .vpn-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .vpn-table tbody tr:nth-of-type(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .vpn-table tbody tr:last-of-type {
+            border-bottom: 2px solid #000;
+        }
+        
+        .vpn-table tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: monospace;
+            border-left: 4px solid #000;
+        }
+        
+        .note-box {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box {
+            background: #ffe6e6;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .tip-box {
+            background: #e6f7ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+        
+        .wx-info {
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .article-title {
+                font-size: 28px;
+            }
+            
+            .article-content {
+                padding: 30px 20px;
+            }
+            
+            .vpn-table {
+                font-size: 0.8em;
+            }
+            
+            .vpn-table th,
+            .vpn-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">KirinXuanの小站</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="index.html#blog">博客</a></li>
+                    <li><a href="index.html#about">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回首页</a>
+        
+        <div class="article-header">
+            <h1 class="article-title">科学上网翻墙教程</h1>
+            <div class="article-meta">
+                <span>技术教程 • 2024年3月22日</span>
+            </div>
+        </div>
+        
+        <div class="article-content">
+            <h2>1. 什么是GFW</h2>
+            <p>GFW(Great Firewall of China)中文名：中国国家防火墙，建立于1998年。我们平常所说的"被墙了"，是指网站内容或服务被防火墙屏蔽了。而"翻墙"是指突破防火墙去浏览那些被屏蔽的网站或手机APP等。</p>
+            <p>建立防火墙主要是为了防止大陆人民访问那些不受中国政府监控的网站，防止人民脱离监控。</p>
+            <p>防火墙主要设计者是方滨兴。</p>
+            
+            <h2>2. 为什么要翻墙</h2>
+            <p>世界上本没有翻墙，因为有了墙，所以才有了梯子，进而有了造梯子的木匠。</p>
+            <p>翻墙除了会看到那些真真假假的信息，还会给你带来很多优质的科研文章、优质的学习资料。</p>
+            <p class="tip-box">真希望有一天这堵阻碍人们获得信息和知识的墙能够消失！</p>
+            
+            <h2>3. 免费翻墙</h2>
+            <p>有时候，我们可能只是想临时上一下外网，或者说有时候我们自建的梯子被封了，就需要免费翻墙软件临时代替一下。</p>
+            <p>每个人都有不同的需求，但不管怎样，免费翻墙软件的需求还是挺大的。</p>
+            <p>所以接下来我就给大家介绍一些好用的免费翻墙资源：</p>
+            
+            <h3>① 免费 SSR 账号</h3>
+            <p>免费 SSR 地址：<a href="https://free.darrenliuwei.com" target="_blank">https://free.darrenliuwei.com</a></p>
+            
+            <h3>② 免费 V2ray 账号</h3>
+            <p>免费 V2ray 地址：<a href="https://free.darrenliuwei.com" target="_blank">https://free.darrenliuwei.com</a></p>
+            
+            <h3>③ 免费 VPN 分享</h3>
+            <table class="vpn-table">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>优点</th>
+                        <th>缺点</th>
+                        <th>系统支持</th>
+                        <th>中文支持</th>
+                        <th>下载地址</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>蓝灯</td>
+                        <td>有免费版，并且抗封能力较强</td>
+                        <td>有流量限制：每月 500MB，不支持 iOS</td>
+                        <td>Linux、Windows、MacOS、Android</td>
+                        <td>支持中文</td>
+                        <td><a href="#" target="_blank">蓝灯官网</a>(需翻墙), <a href="#" target="_blank">GitHub 地址</a>(不需要翻墙)</td>
+                    </tr>
+                    <tr>
+                        <td>Windscribe</td>
+                        <td>有免费版，并且抗封能力较强</td>
+                        <td>有流量限制：每月 2GB，验证邮箱后每月 10GB</td>
+                        <td>Linux、Windows、MacOS、Android、iOS</td>
+                        <td>支持中文</td>
+                        <td><a href="#" target="_blank">Windscribe 官网</a>(需翻墙)，<a href="#" target="_blank">GitHub 地址</a>(不需要翻墙)</td>
+                    </tr>
+                    <tr>
+                        <td>萤火虫</td>
+                        <td>免费、无流量限制</td>
+                        <td>速度一般</td>
+                        <td>Linux、Windows、MacOS、Android、iOS</td>
+                        <td>支持中文</td>
+                        <td><a href="#" target="_blank">GitHub 地址</a>(不需要翻墙)</td>
+                    </tr>
+                    <tr>
+                        <td>无界</td>
+                        <td>免费、无流量限制</td>
+                        <td>速度一般、不支持 iOS</td>
+                        <td>Linux、Windows、Android</td>
+                        <td>支持中文</td>
+                        <td><a href="#" target="_blank">无界官网</a>(需翻墙)，<a href="#" target="_blank">GitHub 地址</a>(不需要翻墙)</td>
+                    </tr>
+                    <tr>
+                        <td>自由门</td>
+                        <td>免费、无流量限制</td>
+                        <td>不稳定</td>
+                        <td>Windows、Android</td>
+                        <td>支持中文</td>
+                        <td><a href="#" target="_blank">自由门官网</a>(需翻墙)，<a href="#" target="_blank">GitHub 地址</a>(不需要翻墙)</td>
+                    </tr>
+                    <tr>
+                        <td>赛风</td>
+                        <td>免费、无流量限制</td>
+                        <td>速度一般</td>
+                        <td>Windows、Android、iOS</td>
+                        <td>支持中文</td>
+                        <td><a href="#" target="_blank">赛风官网</a>(需翻墙), <a href="#" target="_blank">镜像</a>(不需要翻墙)</td>
+                    </tr>
+                    <tr>
+                        <td>Tor</td>
+                        <td>免费、无流量限制</td>
+                        <td>速度较慢，翻墙时需使用专门的浏览器 Tor Browser</td>
+                        <td>Linux、Windows、MacOS、Android</td>
+                        <td>网站无中文版，但软件有中文版</td>
+                        <td><a href="#" target="_blank">Tor 官网</a>(需翻墙)，<a href="#" target="_blank">GitHub 地址</a>(不需要翻墙)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>4. 自己建梯子</h2>
+            <p>网上虽然有很多免费的梯子，也有很多收费的梯子。但总感觉那些不是特别的安全，有时候也不是很稳定。还是自己搭建的更放心一点，而且如果和朋友一起合建梯子的话，反而还要比购买的梯子更便宜。</p>
+            
+            <h3>① 购买服务器</h3>
+            <p>服务器需要选择国外的，首选国际知名的 Vultr，速度不错、稳定且性价比高。</p>
+            <p>使用下面的注册地址可以获得 100 美元：</p>
+            <p><a href="https://www.vultr.com/?ref=8371895-6G" target="_blank">Vultr注册地址：https://www.vultr.com/?ref=8371895-6G</a></p>
+            <p>注册并邮件激活账号，充值后即可购买服务器。充值方式: PayPal、支付宝、微信、Bitcoin、信用卡、Gift Code 等 6 种付款方式。</p>
+            
+            <div class="note-box">
+                <p><strong>计费说明：</strong> Vultr实际上是折算成小时来计费的，比如服务器是 5 美元 1 个月，那么每小时收费为 5/30/24=0.0069 美元 会自动从账号中扣费，只要保证账号有钱即可。如果你部署的服务器实测后速度不理想，你可以把它删掉（destroy），重新换个地区的服务器来部署，因为新的服务器就是新的 IP，所以当 IP 被墙时这个方法很有用。</p>
+                <p>计费从你开通服务器开始算的，不管你有没有使用，即使服务器处于关机状态仍然会计费，如果你没有开通服务器就不算。比如你今天早上开通了服务器，但你有事情，晚上才部署，那么这段时间是会计费的。同理，如果你早上删掉服务器，第二天才开通新的服务器，那么这段时间是不会计费的。</p>
+            </div>
+            
+            <p class="tip-box">温馨提醒：同样的服务器位置，不同的宽带类型和地区所搭建的账号的翻墙速度会不同，以实测为准。</p>
+            
+            <h3>② 连接服务器</h3>
+            <p>如果你本地电脑使用的是 Windows 系统，那我推荐你下载一个叫 Git Bash 的软件来远程连接服务器。</p>
+            <p>官方免费下载地址：<a href="https://git-scm.com/downloads" target="_blank">https://git-scm.com/downloads</a></p>
+            <p class="note-box">如果你是 Linux 或者 MacOS 用户，请忽略上面的软件。直接打开终端（Terminal），输入 <code>ssh root@ip</code> 其中 ip 替换成你服务器的 IPv4 地址, 按回车键，然后复制粘贴密码，按回车键即可登录。粘贴密码时不显示密码，但不影响。</p>
+            
+            <p>在开始登陆服务器之前，我们先打开命令行 Ping 一下自己服务器上的 IP 地址是否能 Ping 通：</p>
+            <div class="code-block">ping 你的服务器IP地址</div>
+            <p>接着打开 git bash 软件，输入：</p>
+            <div class="code-block">ssh root@你的服务器ip地址</div>
+            
+            <h3>③ 连接服务器VPS常见问题</h3>
+            <p>如果遇到连接问题，可以尝试以下解决方法：</p>
+            <ol>
+                <li>用文本编辑器打开 <code>/c/Users/你的用户名/.ssh/known_hosts</code> 这个文件</li>
+                <li>删除报错信息中提示的那一行</li>
+                <li>一定要注意：认认真真看清楚你自己那边的报错信息，每个人的用户名都不一样，每个人的 known_hosts 文件里的数据量都是不一样的，一定要认认真真看报错信息！</li>
+            </ol>
+            
+            <h3>④ 修改Vultr服务器密码</h3>
+            <p>详解怎么修改Vultr服务器 root 用户密码：</p>
+            <p>先通过命令行连接上服务器，然后使用命令：</p>
+            <div class="code-block">passwd root</div>
+            <p>然后根据提示输入新的密码。</p>
+            <p class="warning-box">修改完成之后立即生效(请谨慎操作)，断开服务器，下次再连接服务器就需要输入修改后的新密码了。</p>
+            
+            <h2>5. 怎样 ping IP地址</h2>
+            <p>总会时不时地有人问我怎样查看自己服务器的IP有没有被墙？怎样ping IP地址？</p>
+            <p>虽然问题很简单，但还是会有人不懂，那我就来教一下大家吧！</p>
+            
+            <h3>ping IP地址</h3>
+            <p>例如：</p>
+            <div class="code-block">ping 127.0.0.1</div>
+            <p>将IP地址 127.0.0.1 换成你自己服务器的IP地址</p>
+            <p class="note-box">注意: ping 和 IP地址 中间有一个空格</p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 KirinXuanの小站 - 保留所有权利</p>
+            <p class="wx-info">wx：kirinxuanyyds</p>
+        </div>
+    </footer>
+</body>
+</html>
