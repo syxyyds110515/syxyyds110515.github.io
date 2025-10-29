@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具 | KirinXuanの小站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 15%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 45%;
+            animation: wave 15s infinite linear;
+            transform-origin: 50% 50%;
+        }
+        
+        .wave:nth-child(1) {
+            animation-delay: 0s;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            background: rgba(255, 255, 255, 0.2);
+            height: 12%;
+        }
+        
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            background: rgba(255, 255, 255, 0.1);
+            height: 10%;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+        
+        nav a:hover, nav a.active {
+            color: #000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+        }
+        
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000;
+        }
+        
+        .page-header p {
+            font-size: 20px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .tool-card-content {
+            padding: 25px;
+        }
+        
+        .tool-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #000;
+            line-height: 1.4;
+        }
+        
+        .tool-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .use-tool {
+            display: inline-block;
+            background: #000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .use-tool:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+        
+        .wx-info {
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .page-header h1 {
+                font-size: 36px;
+            }
+            
+            .page-header p {
+                font-size: 18px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">KirinXuanの小站</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="blogs.html">博客</a></li>
+                    <li><a href="tools.html" class="active">工具</a></li>
+                    <li><a href="#about">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="page-header">
+            <h1>实用工具</h1>
+            <p>精选实用小工具，提高工作效率和生活品质</p>
+        </section>
+        
+        <section class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-card-content">
+                    <h3>图片合成器</h3>
+                    <p>一个有趣的QQ图片合成器，可以生成缩略图与大图不同的效果图片，在QQ中实现有趣的视觉效果。</p>
+                    <a href="image-combiner.html" class="use-tool">使用工具</a>
+                </div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-card-content">
+                    <h3>短信轰炸</h3>
+                    <p>一个有趣的整蛊工具，可以给好友发送有趣的短信内容，仅供娱乐使用。</p>
+                    <a href="duanxinhongzha.html" class="use-tool">使用工具</a>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 KirinXuanの小站 - 保留所有权利</p>
+            <p>联系邮箱: contact@kirinxuan.com</p>
+            <p class="wx-info">wx：kirinxuanyyds</p>
+        </div>
+    </footer>
+</body>
+</html>
