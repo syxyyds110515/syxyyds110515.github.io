@@ -288,26 +288,6 @@
             min-height: 20px;
         }
         
-        .prank-section {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid #eee;
-        }
-        
-        .prank-text {
-            margin-bottom: 15px;
-            color: #666;
-            font-size: 16px;
-        }
-        
-        .prank-btn {
-            background: #6c757d;
-        }
-        
-        .prank-btn:hover {
-            background: #5a6268;
-        }
-        
         footer {
             background: rgba(0, 0, 0, 0.9);
             color: white;
@@ -392,7 +372,7 @@
                 <ul>
                     <li><a href="#">首页</a></li>
                     <li><a href="blogs.html">博客</a></li>
-                <li><a href="tools.html">工具</a></li>  <!-- 新增此行 -->
+                    <li><a href="tools.html">工具</a></li>
                     <li><a href="#about">关于</a></li>
                 </ul>
             </nav>
@@ -468,17 +448,13 @@
                 <button type="submit">进入小站</button>
                 <div class="message" id="message"></div>
             </form>
-            
-            <div class="prank-section">
-                <div class="prank-text">整蛊一下好友？</div>
-                <button id="prank-btn" class="prank-btn">短信轰炸</button>
-            </div>
         </section>
     </div>
     
     <footer>
         <div class="footer-content">
             <p>© 2025 KirinXuanの小站 - 保留所有权利</p>
+            <p>联系邮箱: contact@kirinxuan.com</p>
             <p class="wx-info">wx：kirinxuanyyds</p>
         </div>
     </footer>
@@ -502,11 +478,6 @@
                 document.getElementById('password').value = '';
                 document.getElementById('password').focus();
             }
-        });
-        
-        // 处理整蛊按钮点击
-        document.getElementById('prank-btn').addEventListener('click', function() {
-            window.location.href = 'duanxinhongzha.html';
         });
     </script>
 </body>
