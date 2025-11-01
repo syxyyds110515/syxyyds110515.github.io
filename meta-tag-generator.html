@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta标签生成工具 | KirinXuanの小站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 15%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 45%;
+            animation: wave 15s infinite linear;
+            transform-origin: 50% 50%;
+        }
+        
+        .wave:nth-child(1) {
+            animation-delay: 0s;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            background: rgba(255, 255, 255, 0.2);
+            height: 12%;
+        }
+        
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            background: rgba(255, 255, 255, 0.1);
+            height: 10%;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+        
+        nav a:hover, nav a.active {
+            color: #000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #000;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #000;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 30px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #000;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .char-count {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .button-group button {
+            padding: 12px 24px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .button-group button:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .button-group button.secondary {
+            background: #6c757d;
+        }
+        
+        .button-group button.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .result-container {
+            margin-top: 30px;
+        }
+        
+        .result-container h3 {
+            margin-bottom: 10px;
+            color: #000;
+            font-size: 18px;
+        }
+        
+        .result-code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            margin-bottom: 15px;
+        }
+        
+        .copy-btn {
+            padding: 8px 16px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #333;
+        }
+        
+        .instructions {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #000;
+        }
+        
+        .instructions p {
+            margin-bottom: 10px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .instructions ul, .instructions ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+            color: #666;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+        
+        .wx-info {
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+            
+            .page-header p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">KirinXuanの小站</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="blogs.html">博客</a></li>
+                    <li><a href="tools.html">工具</a></li>
+                    <li><a href="about.html">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <a href="tools.html" class="back-link">← 返回工具列表</a>
+        
+        <section class="page-header">
+            <h1>Meta标签生成工具</h1>
+            <p>轻松生成网页所需的各类Meta标签，提升SEO效果和用户体验</p>
+        </section>
+        
+        <section class="tool-container">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="title">网页标题 (Title) <span class="required">*</span></label>
+                    <input type="text" id="title" placeholder="例如：我的网站 - 欢迎光临">
+                    <div class="char-count" id="title-count">0/60 字符</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">网页描述 (Description) <span class="required">*</span></label>
+                    <textarea id="description" placeholder="例如：这是一个关于技术分享和实用工具的网站，提供各种在线工具和教程"></textarea>
+                    <div class="char-count" id="description-count">0/200 字符</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="keywords">关键词 (Keywords)</label>
+                    <input type="text" id="keywords" placeholder="例如：技术,工具,教程,在线工具,网页开发">
+                    <div class="char-count" id="keywords-count">0/255 字符</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="author">作者 (Author)</label>
+                    <input type="text" id="author" placeholder="例如：KirinXuan">
+                </div>
+                
+                <div class="form-group">
+                    <label for="language">语言 (Language)</label>
+                    <select id="language">
+                        <option value="zh-CN">中文 (zh-CN)</option>
+                        <option value="en">English (en)</option>
+                        <option value="ja">日本語 (ja)</option>
+                        <option value="ko">한국어 (ko)</option>
+                        <option value="fr">Français (fr)</option>
+                        <option value="de">Deutsch (de)</option>
+                        <option value="es">Español (es)</option>
+                        <option value="ru">Русский (ru)</option>
+                        <option value="custom">自定义</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="copyright">版权信息 (Copyright)</label>
+                    <input type="text" id="copyright" placeholder="例如：© 2025 KirinXuanの小站">
+                </div>
+                
+                <div class="form-group">
+                    <label for="robots">机器人向导 (Robots)</label>
+                    <select id="robots">
+                        <option value="index,follow">index,follow - 允许抓取和跟踪链接</option>
+                        <option value="noindex,follow">noindex,follow - 不抓取但跟踪链接</option>
+                        <option value="index,nofollow">index,nofollow - 抓取但不跟踪链接</option>
+                        <option value="noindex,nofollow">noindex,nofollow - 不抓取也不跟踪链接</option>
+                        <option value="none">none - 等同于noindex,nofollow</option>
+                        <option value="all">all - 等同于index,follow</option>
+                        <option value="noarchive">noarchive - 不存档页面</option>
+                        <option value="nosnippet">nosnippet - 不显示摘要</option>
+                        <option value="max-snippet:50">max-snippet:50 - 限制摘要长度</option>
+                        <option value="max-image-preview:large">max-image-preview:large - 大图预览</option>
+                        <option value="custom">自定义</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="viewport">自适应 (Viewport)</label>
+                    <select id="viewport">
+                        <option value="width=device-width, initial-scale=1.0">默认 - width=device-width, initial-scale=1.0</option>
+                        <option value="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">禁止缩放 - width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no</option>
+                        <option value="width=1200">固定宽度 - width=1200</option>
+                        <option value="custom">自定义</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button id="generate-btn">生成Meta标签</button>
+                <button id="copy-btn" class="secondary">复制结果</button>
+                <button id="reset-btn" class="secondary">重置表单</button>
+            </div>
+            
+            <div class="result-container">
+                <h3>生成结果</h3>
+                <div class="result-code" id="result-code">
+                    <!-- 生成的Meta标签将显示在这里 -->
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>Meta标签说明</h3>
+                
+                <h4>什么是Meta标签？</h4>
+                <p>Meta标签是HTML文档的元数据，它们用于描述网页的各种属性和信息。这些信息虽然不会直接显示在页面上，但对搜索引擎优化(SEO)和网页显示都非常重要。</p>
+                
+                <h4>常用Meta标签说明</h4>
+                <ul>
+                    <li><strong>title</strong>：网页标题，是搜索引擎最看重的内容之一，建议控制在10-30个字符。</li>
+                    <li><strong>description</strong>：网页描述，用于搜索引擎结果页面的网页预览，建议控制在200个字符以内。</li>
+                    <li><strong>keywords</strong>：网页关键词，用逗号分隔，帮助搜索引擎了解网页的主题。</li>
+                    <li><strong>robots</strong>：告诉搜索引擎如何抓取和索引页面内容。</li>
+                    <li><strong>viewport</strong>：用于移动端页面的显示控制，设置页面的缩放和显示方式。</li>
+                </ul>
+                
+                <h4>Meta标签的重要性</h4>
+                <ol>
+                    <li>提升搜索引擎优化(SEO)效果</li>
+                    <li>控制网页在各种设备上的显示方式</li>
+                    <li>提供网页的基本信息和属性</li>
+                    <li>影响搜索引擎对网页的收录方式</li>
+                </ol>
+                
+                <h4>使用建议</h4>
+                <ol>
+                    <li>确保title和description的内容准确描述页面内容</li>
+                    <li>keywords使用准确的关键词，避免堆砌</li>
+                    <li>viewport设置要考虑移动端用户体验</li>
+                    <li>robots根据实际需求合理设置，避免误伤搜索引擎收录</li>
+                </ol>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 KirinXuanの小站 - 保留所有权利</p>
+            <p>联系邮箱: contact@kirinxuan.com</p>
+            <p class="wx-info">wx：kirinxuanyyds</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 获取DOM元素
+        const titleInput = document.getElementById('title');
+        const descriptionInput = document.getElementById('description');
+        const keywordsInput = document.getElementById('keywords');
+        const authorInput = document.getElementById('author');
+        const languageSelect = document.getElementById('language');
+        const copyrightInput = document.getElementById('copyright');
+        const robotsSelect = document.getElementById('robots');
+        const viewportSelect = document.getElementById('viewport');
+        const generateBtn = document.getElementById('generate-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const resultCode = document.getElementById('result-code');
+        
+        const titleCount = document.getElementById('title-count');
+        const descriptionCount = document.getElementById('description-count');
+        const keywordsCount = document.getElementById('keywords-count');
+        
+        // 字符计数更新
+        titleInput.addEventListener('input', function() {
+            const count = this.value.length;
+            titleCount.textContent = `${count}/60 字符`;
+            titleCount.style.color = count > 60 ? '#e74c3c' : '#999';
+        });
+        
+        descriptionInput.addEventListener('input', function() {
+            const count = this.value.length;
+            descriptionCount.textContent = `${count}/200 字符`;
+            descriptionCount.style.color = count > 200 ? '#e74c3c' : '#999';
+        });
+        
+        keywordsInput.addEventListener('input', function() {
+            const count = this.value.length;
+            keywordsCount.textContent = `${count}/255 字符`;
+            keywordsCount.style.color = count > 255 ? '#e74c3c' : '#999';
+        });
+        
+        // 自定义选项处理
+        languageSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                const customInput = document.createElement('input');
+                customInput.type = 'text';
+                customInput.placeholder = '请输入自定义语言代码';
+                customInput.className = 'form-control';
+                customInput.style.marginTop = '5px';
+                
+                this.parentNode.appendChild(customInput);
+                
+                customInput.addEventListener('input', function() {
+                    languageSelect.dataset.customValue = this.value;
+                });
+            } else {
+                const existingInput = this.parentNode.querySelector('input');
+                if (existingInput) {
+                    existingInput.remove();
+                }
+                delete languageSelect.dataset.customValue;
+            }
+        });
+        
+        robotsSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                const customInput = document.createElement('input');
+                customInput.type = 'text';
+                customInput.placeholder = '请输入自定义robots指令';
+                customInput.className = 'form-control';
+                customInput.style.marginTop = '5px';
+                
+                this.parentNode.appendChild(customInput);
+                
+                customInput.addEventListener('input', function() {
+                    robotsSelect.dataset.customValue = this.value;
+                });
+            } else {
+                const existingInput = this.parentNode.querySelector('input');
+                if (existingInput) {
+                    existingInput.remove();
+                }
+                delete robotsSelect.dataset.customValue;
+            }
+        });
+        
+        viewportSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                const customInput = document.createElement('input');
+                customInput.type = 'text';
+                customInput.placeholder = '请输入自定义viewport值';
+                customInput.className = 'form-control';
+                customInput.style.marginTop = '5px';
+                
+                this.parentNode.appendChild(customInput);
+                
+                customInput.addEventListener('input', function() {
+                    viewportSelect.dataset.customValue = this.value;
+                });
+            } else {
+                const existingInput = this.parentNode.querySelector('input');
+                if (existingInput) {
+                    existingInput.remove();
+                }
+                delete viewportSelect.dataset.customValue;
+            }
+        });
+        
+        // 生成Meta标签
+        generateBtn.addEventListener('click', function() {
+            const title = titleInput.value.trim();
+            const description = descriptionInput.value.trim();
+            const keywords = keywordsInput.value.trim();
+            const author = authorInput.value.trim();
+            const language = languageSelect.dataset.customValue || languageSelect.value;
+            const copyright = copyrightInput.value.trim();
+            const robots = robotsSelect.dataset.customValue || robotsSelect.value;
+            const viewport = viewportSelect.dataset.customValue || viewportSelect.value;
+            
+            // 验证必填字段
+            if (!title) {
+                alert('请输入网页标题');
+                titleInput.focus();
+                return;
+            }
+            
+            if (!description) {
+                alert('请输入网页描述');
+                descriptionInput.focus();
+                return;
+            }
+            
+            // 生成Meta标签代码
+            let metaTags = [];
+            
+            // 标题标签
+            metaTags.push(`<title>${escapeHtml(title)}</title>`);
+            
+            // 描述标签
+            metaTags.push(`<meta name="description" content="${escapeHtml(description)}">`);
+            
+            // 关键词标签
+            if (keywords) {
+                metaTags.push(`<meta name="keywords" content="${escapeHtml(keywords)}">`);
+            }
+            
+            // 作者标签
+            if (author) {
+                metaTags.push(`<meta name="author" content="${escapeHtml(author)}">`);
+            }
+            
+            // 语言标签
+            if (language && language !== 'custom') {
+                metaTags.push(`<meta http-equiv="Content-Language" content="${escapeHtml(language)}">`);
+            }
+            
+            // 版权标签
+            if (copyright) {
+                metaTags.push(`<meta name="copyright" content="${escapeHtml(copyright)}">`);
+            }
+            
+            // Robots标签
+            if (robots) {
+                metaTags.push(`<meta name="robots" content="${escapeHtml(robots)}">`);
+            }
+            
+            // Viewport标签
+            if (viewport) {
+                metaTags.push(`<meta name="viewport" content="${escapeHtml(viewport)}">`);
+            }
+            
+            // 字符集标签
+            metaTags.push('<meta charset="UTF-8">');
+            
+            // 显示结果
+            resultCode.textContent = metaTags.join('\n');
+        });
+        
+        // 复制结果
+        copyBtn.addEventListener('click', function() {
+            if (!resultCode.textContent) {
+                alert('请先生成Meta标签');
+                return;
+            }
+            
+            navigator.clipboard.writeText(resultCode.textContent)
+                .then(() => {
+                    alert('已复制到剪贴板');
+                })
+                .catch(err => {
+                    console.error('复制失败: ', err);
+                    alert('复制失败，请手动复制');
+                });
+        });
+        
+        // 重置表单
+        resetBtn.addEventListener('click', function() {
+            titleInput.value = '';
+            descriptionInput.value = '';
+            keywordsInput.value = '';
+            authorInput.value = '';
+            copyrightInput.value = '';
+            
+            languageSelect.value = 'zh-CN';
+            robotsSelect.value = 'index,follow';
+            viewportSelect.value = 'width=device-width, initial-scale=1.0';
+            
+            titleCount.textContent = '0/60 字符';
+            descriptionCount.textContent = '0/200 字符';
+            keywordsCount.textContent = '0/255 字符';
+            
+            resultCode.textContent = '';
+            
+            // 移除自定义输入框
+            const customInputs = document.querySelectorAll('.form-group input[type="text"]:not([id])');
+            customInputs.forEach(input => input.remove());
+            
+            // 清除自定义值
+            delete languageSelect.dataset.customValue;
+            delete robotsSelect.dataset.customValue;
+            delete viewportSelect.dataset.customValue;
+        });
+        
+        // HTML转义函数
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // 页面加载时初始化
+        window.addEventListener('load', function() {
+            // 设置示例值
+            titleInput.value = 'KirinXuanの小站 - 技术分享与实用工具';
+            descriptionInput.value = '一个专注于技术分享和实用工具开发的个人网站，提供各种在线工具、技术教程和生活感悟分享';
+            keywordsInput.value = '技术,工具,教程,在线工具,网页开发,编程';
+            authorInput.value = 'KirinXuan';
+            copyrightInput.value = '© 2025 KirinXuanの小站';
+            
+            // 更新字符计数
+            titleInput.dispatchEvent(new Event('input'));
+            descriptionInput.dispatchEvent(new Event('input'));
+            keywordsInput.dispatchEvent(new Event('input'));
+            
+            // 自动生成示例
+            generateBtn.click();
+        });
+    </script>
+</body>
+</html>
