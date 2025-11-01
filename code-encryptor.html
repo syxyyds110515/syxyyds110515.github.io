@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码加密工具 | KirinXuanの小站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 15%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 45%;
+            animation: wave 15s infinite linear;
+            transform-origin: 50% 50%;
+        }
+        
+        .wave:nth-child(1) {
+            animation-delay: 0s;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            background: rgba(255, 255, 255, 0.2);
+            height: 12%;
+        }
+        
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            background: rgba(255, 255, 255, 0.1);
+            height: 10%;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 16px;
+        }
+        
+        nav a:hover, nav a.active {
+            color: #000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #000;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #000;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 30px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f9f9f9;
+        }
+        
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #000;
+            background: #f0f0f0;
+        }
+        
+        .upload-area p {
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .upload-area .file-types {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .code-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .code-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .code-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .code-section h3 {
+            margin-bottom: 10px;
+            color: #000;
+            font-size: 18px;
+        }
+        
+        .code-editor {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .editor-header span {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .editor-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .line-numbers {
+            background: #f0f0f0;
+            padding: 15px 10px;
+            text-align: right;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #999;
+            overflow: hidden;
+            user-select: none;
+            border-right: 1px solid #ddd;
+        }
+        
+        .code-content {
+            flex: 1;
+            overflow: auto;
+        }
+        
+        .code-editor textarea {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            border: none;
+            resize: none;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            background: #f9f9f9;
+            outline: none;
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow: auto;
+        }
+        
+        .code-editor pre {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            margin: 0;
+            overflow: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            background: #f9f9f9;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .mode-selector {
+            margin-bottom: 20px;
+        }
+        
+        .mode-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .mode-selector select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-selector select:focus {
+            outline: none;
+            border-color: #000;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .button-group button {
+            padding: 12px 24px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .button-group button:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .button-group button.secondary {
+            background: #6c757d;
+        }
+        
+        .button-group button.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .button-group button.success {
+            background: #28a745;
+        }
+        
+        .button-group button.success:hover {
+            background: #218838;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-buttons button {
+            padding: 8px 16px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-buttons button:hover {
+            background: #333;
+        }
+        
+        .action-buttons button.success {
+            background: #28a745;
+        }
+        
+        .action-buttons button.success:hover {
+            background: #218838;
+        }
+        
+        .instructions {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #000;
+        }
+        
+        .instructions p {
+            margin-bottom: 10px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+            color: #666;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+        
+        .wx-info {
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+            
+            .page-header p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">KirinXuanの小站</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="blogs.html">博客</a></li>
+                    <li><a href="tools.html">工具</a></li>
+                    <li><a href="about.html">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <a href="tools.html" class="back-link">← 返回工具列表</a>
+        
+        <section class="page-header">
+            <h1>代码加密工具</h1>
+            <p>支持JavaScript、CSS、HTML代码的加密，提供基础加密和高级混淆两种模式</p>
+        </section>
+        
+        <section class="tool-container">
+            <div class="upload-area" id="upload-area">
+                <p>点击或拖拽文件到此处上传</p>
+                <p class="file-types">支持 .js、.css、.html 格式，自动识别文件类型</p>
+                <input type="file" id="file-input" class="file-input" accept=".js,.css,.html">
+                <div class="file-info" id="file-info">源代码 0 B</div>
+            </div>
+            
+            <div class="mode-selector">
+                <label for="encryption-mode">加密模式：</label>
+                <select id="encryption-mode">
+                    <option value="basic">基础加密</option>
+                    <option value="advanced">高级混淆</option>
+                </select>
+            </div>
+            
+            <div class="code-container">
+                <div class="code-section">
+                    <h3>源代码</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>输入代码</span>
+                            <span id="input-lines">0 行</span>
+                        </div>
+                        <div class="editor-body">
+                            <div class="line-numbers" id="input-line-numbers"></div>
+                            <div class="code-content">
+                                <textarea id="input-code" placeholder="请粘贴代码或上传文件..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="format-btn">格式化</button>
+                        <button id="clear-input-btn" class="secondary">清空输入</button>
+                    </div>
+                </div>
+                
+                <div class="code-section">
+                    <h3>加密后的代码</h3>
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>输出代码</span>
+                            <span id="output-lines">0 行</span>
+                        </div>
+                        <div class="editor-body">
+                            <div class="line-numbers" id="output-line-numbers"></div>
+                            <div class="code-content">
+                                <pre id="output-code"></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="copy-btn">复制</button>
+                        <button id="export-btn" class="success">导出</button>
+                        <button id="clear-output-btn" class="secondary">清空输出</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button id="encrypt-btn">加密</button>
+                <button id="advanced-encrypt-btn">高级加密</button>
+                <button id="clear-all-btn" class="secondary">清空全部</button>
+            </div>
+            
+            <div class="instructions">
+                <h3>功能简介</h3>
+                <p>代码加密工具支持对JavaScript、CSS和HTML代码进行加密处理，提供基础加密和高级混淆两种加密模式。加密后的代码可以正常运行，同时能够有效防止代码被直接查看或复制。</p>
+                
+                <h4>主要功能</h4>
+                <ul>
+                    <li>支持多种代码格式（JavaScript、CSS、HTML）的加密</li>
+                    <li>提供基础加密和高级混淆两种加密模式</li>
+                    <li>支持文件拖拽上传和直接粘贴输入</li>
+                    <li>加密后代码可正常运行</li>
+                    <li>代码格式化功能</li>
+                    <li>行号显示和代码统计</li>
+                </ul>
+                
+                <h4>使用说明</h4>
+                <ol>
+                    <li>通过拖拽、上传或粘贴输入需要加密的代码</li>
+                    <li>选择基础加密或高级加密模式</li>
+                    <li>点击加密按钮进行代码加密</li>
+                    <li>使用复制或导出功能获取加密后的代码</li>
+                </ol>
+                
+                <h4>注意事项</h4>
+                <ul>
+                    <li>加密后代码体积会增大，建议在开发完成后使用</li>
+                    <li>高级加密模式提供更好的保护但会增加代码体积</li>
+                    <li>请勿加密包含敏感信息的代码</li>
+                    <li>加密后的代码可能无法再次编辑，请保留原始代码</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 KirinXuanの小站 - 保留所有权利</p>
+            <p>联系邮箱: contact@kirinxuan.com</p>
+            <p class="wx-info">wx：kirinxuanyyds</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 获取DOM元素
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const fileInfo = document.getElementById('file-info');
+        const inputCode = document.getElementById('input-code');
+        const outputCode = document.getElementById('output-code');
+        const encryptBtn = document.getElementById('encrypt-btn');
+        const advancedEncryptBtn = document.getElementById('advanced-encrypt-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+        const clearInputBtn = document.getElementById('clear-input-btn');
+        const clearOutputBtn = document.getElementById('clear-output-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const formatBtn = document.getElementById('format-btn');
+        const encryptionMode = document.getElementById('encryption-mode');
+        const inputLines = document.getElementById('input-lines');
+        const outputLines = document.getElementById('output-lines');
+        const inputLineNumbers = document.getElementById('input-line-numbers');
+        const outputLineNumbers = document.getElementById('output-line-numbers');
+        
+        // 文件上传处理
+        uploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                handleFile(this.files[0]);
+            }
+        });
+        
+        // 拖拽处理
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        
+        // 处理上传的文件
+        function handleFile(file) {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const supportedExtensions = ['js', 'css', 'html'];
+            
+            if (!supportedExtensions.includes(fileExtension)) {
+                alert('不支持的文件格式，请上传 .js、.css 或 .html 文件');
+                return;
+            }
+            
+            fileInfo.textContent = `${file.name} - ${formatFileSize(file.size)}`;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                inputCode.value = e.target.result;
+                updateLineNumbers(inputCode, inputLineNumbers, inputLines);
+            };
+            reader.readAsText(file);
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // 更新行号显示
+        function updateLineNumbers(textarea, lineNumbersElement, linesElement) {
+            const lines = textarea.value.split('\n').length;
+            linesElement.textContent = `${lines} 行`;
+            
+            let lineNumbersHTML = '';
+            for (let i = 1; i <= lines; i++) {
+                lineNumbersHTML += `${i}<br>`;
+            }
+            lineNumbersElement.innerHTML = lineNumbersHTML;
+        }
+        
+        // 更新输出行号
+        function updateOutputLineNumbers() {
+            const lines = outputCode.textContent.split('\n').length;
+            outputLines.textContent = `${lines} 行`;
+            
+            let lineNumbersHTML = '';
+            for (let i = 1; i <= lines; i++) {
+                lineNumbersHTML += `${i}<br>`;
+            }
+            outputLineNumbers.innerHTML = lineNumbersHTML;
+        }
+        
+        // 输入框内容变化时更新行号
+        inputCode.addEventListener('input', function() {
+            updateLineNumbers(inputCode, inputLineNumbers, inputLines);
+            fileInfo.textContent = `源代码 - ${formatFileSize(inputCode.value.length)}`;
+        });
+        
+        // 基础加密按钮点击事件
+        encryptBtn.addEventListener('click', function() {
+            const code = inputCode.value.trim();
+            if (!code) {
+                alert('请输入要加密的代码');
+                return;
+            }
+            
+            encryptionMode.value = 'basic';
+            const result = basicEncrypt(code);
+            outputCode.textContent = result;
+            updateOutputLineNumbers();
+        });
+        
+        // 高级加密按钮点击事件
+        advancedEncryptBtn.addEventListener('click', function() {
+            const code = inputCode.value.trim();
+            if (!code) {
+                alert('请输入要加密的代码');
+                return;
+            }
+            
+            encryptionMode.value = 'advanced';
+            const result = advancedEncrypt(code);
+            outputCode.textContent = result;
+            updateOutputLineNumbers();
+        });
+        
+        // 导出按钮点击事件
+        exportBtn.addEventListener('click', function() {
+            if (!outputCode.textContent) {
+                alert('请先生成加密代码');
+                return;
+            }
+            
+            const blob = new Blob([outputCode.textContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'encrypted_code.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+        
+        // 清空全部按钮点击事件
+        clearAllBtn.addEventListener('click', function() {
+            inputCode.value = '';
+            outputCode.textContent = '';
+            fileInfo.textContent = '源代码 0 B';
+            fileInput.value = '';
+            updateLineNumbers(inputCode, inputLineNumbers, inputLines);
+            updateOutputLineNumbers();
+        });
+        
+        // 清空输入按钮点击事件
+        clearInputBtn.addEventListener('click', function() {
+            inputCode.value = '';
+            fileInfo.textContent = '源代码 0 B';
+            fileInput.value = '';
+            updateLineNumbers(inputCode, inputLineNumbers, inputLines);
+        });
+        
+        // 清空输出按钮点击事件
+        clearOutputBtn.addEventListener('click', function() {
+            outputCode.textContent = '';
+            updateOutputLineNumbers();
+        });
+        
+        // 复制按钮点击事件
+        copyBtn.addEventListener('click', function() {
+            if (!outputCode.textContent) {
+                alert('没有内容可复制');
+                return;
+            }
+            
+            navigator.clipboard.writeText(outputCode.textContent)
+                .then(() => {
+                    alert('已复制到剪贴板');
+                })
+                .catch(err => {
+                    console.error('复制失败: ', err);
+                    alert('复制失败，请手动复制');
+                });
+        });
+        
+        // 格式化按钮点击事件
+        formatBtn.addEventListener('click', function() {
+            const code = inputCode.value.trim();
+            if (!code) {
+                alert('请输入要格式化的代码');
+                return;
+            }
+            
+            try {
+                // 简单的代码格式化（实际应用中可能需要更复杂的格式化逻辑）
+                const formattedCode = code
+                    .replace(/\s+/g, ' ') // 压缩多个空格为一个
+                    .replace(/\s*\{\s*/g, ' {\n  ') // 格式化大括号
+                    .replace(/\s*\}\s*/g, '\n}\n') // 格式化结束大括号
+                    .replace(/\s*;\s*/g, ';\n  ') // 格式化分号
+                    .replace(/\s*\(\s*/g, '(') // 格式化左括号
+                    .replace(/\s*\)\s*/g, ')') // 格式化右括号
+                    .replace(/\n\s*\n/g, '\n'); // 删除空行
+                
+                inputCode.value = formattedCode;
+                updateLineNumbers(inputCode, inputLineNumbers, inputLines);
+            } catch (e) {
+                alert('格式化失败，请检查代码语法');
+                console.error(e);
+            }
+        });
+        
+        // 基础加密函数
+        function basicEncrypt(code) {
+            // 简单的Base64编码
+            return btoa(unescape(encodeURIComponent(code)));
+        }
+        
+        // 高级加密函数
+        function advancedEncrypt(code) {
+            // 更复杂的混淆算法
+            let result = '';
+            
+            // 字符替换
+            for (let i = 0; i < code.length; i++) {
+                const char = code.charAt(i);
+                
+                // 随机替换一些字符
+                if (Math.random() > 0.7) {
+                    // 将字符转换为十六进制
+                    result += '\\x' + char.charCodeAt(0).toString(16);
+                } else {
+                    result += char;
+                }
+            }
+            
+            // 添加随机注释
+            const randomComments = [
+                '/* Encrypted by KirinXuan */',
+                '/* Do not modify this code */',
+                '/* Protected content */',
+                '/* Secure code */'
+            ];
+            
+            const randomComment = randomComments[Math.floor(Math.random() * randomComments.length)];
+            
+            // 添加额外的混淆层
+            return randomComment + '\n' + 
+                   '(function(){\n' +
+                   '  var _0x' + Math.random().toString(16).substr(2, 4) + ' = "' + btoa(result) + '";\n' +
+                   '  eval(atob(_0x' + Math.random().toString(16).substr(2, 4) + '));\n' +
+                   '})();';
+        }
+        
+        // 页面加载时添加示例代码
+        window.addEventListener('load', function() {
+            inputCode.value = `// 示例JavaScript代码
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+
+console.log(greet("World"));
+
+// 简单的计算函数
+function add(a, b) {
+    return a + b;
+}
+
+console.log(add(5, 3));`;
+            
+            fileInfo.textContent = '示例代码 - ' + formatFileSize(inputCode.value.length);
+            updateLineNumbers(inputCode, inputLineNumbers, inputLines);
+        });
+    </script>
+</body>
+</html>
