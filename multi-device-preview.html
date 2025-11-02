@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>多设备网页预览工具 | KirinXuanの小站</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,6 +18,7 @@
             background: #f5f7fa;
             min-height: 100vh;
             color: #333;
+            overflow-x: hidden;
         }
         
         header {
@@ -222,10 +224,14 @@
         }
         
         .preview-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
             margin-bottom: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 10px;
         }
         
         .device-preview {
@@ -233,6 +239,10 @@
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .device-header {
@@ -240,6 +250,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            width: 100%;
         }
         
         .device-name {
@@ -258,6 +269,8 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
+            display: flex;
+            justify-content: center;
         }
         
         .device-frame::before {
@@ -275,7 +288,6 @@
         .device-frame.phone {
             width: 320px;
             height: 568px;
-            margin: 0 auto;
             border-radius: 24px;
             border: 10px solid #333;
         }
@@ -287,7 +299,6 @@
         .device-frame.tablet {
             width: 768px;
             height: 1024px;
-            margin: 0 auto;
             border-radius: 12px;
             border: 15px solid #333;
         }
@@ -299,6 +310,7 @@
         .device-frame.desktop {
             width: 100%;
             height: 600px;
+            max-width: 1200px;
         }
         
         .device-frame.desktop::before {
@@ -316,6 +328,7 @@
             gap: 10px;
             margin-top: 20px;
             flex-wrap: wrap;
+            justify-content: center;
         }
         
         .action-buttons button {
@@ -355,6 +368,73 @@
         
         .action-buttons button.info:hover {
             background: #138496;
+        }
+        
+        .screenshot-btn {
+            padding: 6px 12px;
+            background: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .screenshot-btn:hover {
+            background: #138496;
+        }
+        
+        .screenshot-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .screenshot-content {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .screenshot-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .screenshot-close:hover {
+            color: #000;
+        }
+        
+        .screenshot-image {
+            max-width: 100%;
+            max-height: 70vh;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .screenshot-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
         }
         
         .instructions {
@@ -414,6 +494,13 @@
             font-size: 14px;
         }
         
+        @media (max-width: 1200px) {
+            .device-frame.tablet {
+                width: 600px;
+                height: 800px;
+            }
+        }
+        
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -443,12 +530,48 @@
             }
             
             .device-frame.tablet {
-                width: 600px;
-                height: 800px;
+                width: 500px;
+                height: 700px;
+            }
+            
+            .device-frame.desktop {
+                width: 100%;
+                height: 400px;
             }
             
             .preview-container {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                align-items: center;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .device-preview {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .device-frame.tablet {
+                width: 400px;
+                height: 600px;
+            }
+            
+            .url-input {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .device-frame.phone {
+                width: 250px;
+                height: 450px;
+            }
+            
+            .device-frame.tablet {
+                width: 350px;
+                height: 500px;
             }
         }
     </style>
@@ -498,40 +621,11 @@
             
             <div class="preview-container" id="preview-container">
                 <!-- 设备预览将在这里动态生成 -->
-                <div class="device-preview">
-                    <div class="device-header">
-                        <div class="device-name">iPhone 12</div>
-                        <div class="device-size">390×844</div>
-                    </div>
-                    <div class="device-frame phone">
-                        <iframe class="preview-iframe" id="preview-phone" src="about:blank"></iframe>
-                    </div>
-                </div>
-                
-                <div class="device-preview">
-                    <div class="device-header">
-                        <div class="device-name">iPad Air</div>
-                        <div class="device-size">820×1180</div>
-                    </div>
-                    <div class="device-frame tablet">
-                        <iframe class="preview-iframe" id="preview-tablet" src="about:blank"></iframe>
-                    </div>
-                </div>
-                
-                <div class="device-preview">
-                    <div class="device-header">
-                        <div class="device-name">桌面电脑</div>
-                        <div class="device-size">1200×800</div>
-                    </div>
-                    <div class="device-frame desktop">
-                        <iframe class="preview-iframe" id="preview-desktop" src="about:blank"></iframe>
-                    </div>
-                </div>
             </div>
             
             <div class="action-buttons">
                 <button id="refresh-btn" class="info"><i class="fas fa-redo"></i> 刷新预览</button>
-                <button id="screenshot-btn" class="success"><i class="fas fa-camera"></i> 截取预览图</button>
+                <button id="screenshot-all-btn" class="success"><i class="fas fa-camera"></i> 截取全部预览图</button>
                 <button id="clear-btn"><i class="fas fa-trash"></i> 清空预览</button>
             </div>
             
@@ -569,6 +663,19 @@
         </section>
     </div>
     
+    <!-- 截图预览模态框 -->
+    <div class="screenshot-modal" id="screenshot-modal">
+        <div class="screenshot-content">
+            <button class="screenshot-close" id="screenshot-close">&times;</button>
+            <h3 style="margin-bottom: 15px;">预览截图</h3>
+            <img class="screenshot-image" id="screenshot-image" src="" alt="截图预览">
+            <div class="screenshot-actions">
+                <button id="download-screenshot" class="success"><i class="fas fa-download"></i> 下载截图</button>
+                <button id="close-screenshot" class="info"><i class="fas fa-times"></i> 关闭</button>
+            </div>
+        </div>
+    </div>
+    
     <footer>
         <div class="footer-content">
             <p>© 2025 KirinXuanの小站 - 保留所有权利</p>
@@ -582,18 +689,19 @@
         const urlInput = document.getElementById('url-input');
         const loadBtn = document.getElementById('load-btn');
         const refreshBtn = document.getElementById('refresh-btn');
-        const screenshotBtn = document.getElementById('screenshot-btn');
+        const screenshotAllBtn = document.getElementById('screenshot-all-btn');
         const clearBtn = document.getElementById('clear-btn');
         const deviceBtns = document.querySelectorAll('.device-btn');
-        const previewIframes = {
-            phone: document.getElementById('preview-phone'),
-            tablet: document.getElementById('preview-tablet'),
-            desktop: document.getElementById('preview-desktop')
-        };
         const previewContainer = document.getElementById('preview-container');
+        const screenshotModal = document.getElementById('screenshot-modal');
+        const screenshotImage = document.getElementById('screenshot-image');
+        const screenshotClose = document.getElementById('screenshot-close');
+        const downloadScreenshot = document.getElementById('download-screenshot');
+        const closeScreenshot = document.getElementById('close-screenshot');
         
         // 当前选中的设备
         let currentDevice = 'all';
+        let currentScreenshotData = null;
         
         // 设备配置
         const devices = [
@@ -649,6 +757,7 @@
                 if (currentDevice === 'all' || currentDevice === device.type) {
                     const devicePreview = document.createElement('div');
                     devicePreview.className = 'device-preview';
+                    devicePreview.dataset.deviceId = device.name.replace(/\s+/g, '-').toLowerCase();
                     
                     devicePreview.innerHTML = `
                         <div class="device-header">
@@ -657,6 +766,11 @@
                         </div>
                         <div class="device-frame ${device.frameClass}">
                             <iframe class="preview-iframe" data-device="${device.type}" src="about:blank"></iframe>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <button class="screenshot-btn" data-device="${device.name}">
+                                <i class="fas fa-camera"></i> 截取此设备
+                            </button>
                         </div>
                     `;
                     
@@ -669,6 +783,16 @@
             iframes.forEach(iframe => {
                 iframe.addEventListener('load', function() {
                     console.log(`设备 ${this.dataset.device} 加载完成`);
+                });
+            });
+            
+            // 绑定单个设备截图按钮事件
+            const screenshotBtns = document.querySelectorAll('.screenshot-btn');
+            screenshotBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const deviceName = this.dataset.device;
+                    const devicePreview = this.closest('.device-preview');
+                    captureDeviceScreenshot(devicePreview, deviceName);
                 });
             });
         }
@@ -709,9 +833,108 @@
             });
         }
         
-        // 截取预览图（简化版本，实际实现可能需要使用html2canvas等库）
-        function takeScreenshot() {
-            alert('截图功能需要额外的库支持。在实际应用中，您可以使用html2canvas等库实现此功能。');
+        // 截取单个设备预览图
+        function captureDeviceScreenshot(deviceElement, deviceName) {
+            // 显示加载提示
+            const originalText = deviceElement.querySelector('.screenshot-btn').innerHTML;
+            deviceElement.querySelector('.screenshot-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> 截图中...';
+            
+            // 使用html2canvas截取设备预览
+            html2canvas(deviceElement, {
+                backgroundColor: '#f9f9f9',
+                scale: 2, // 提高截图质量
+                useCORS: true,
+                allowTaint: true,
+                logging: false
+            }).then(canvas => {
+                // 恢复按钮文本
+                deviceElement.querySelector('.screenshot-btn').innerHTML = originalText;
+                
+                // 显示截图预览
+                showScreenshotPreview(canvas.toDataURL('image/png'), deviceName);
+            }).catch(error => {
+                console.error('截图失败:', error);
+                deviceElement.querySelector('.screenshot-btn').innerHTML = originalText;
+                alert('截图失败，请重试或使用其他浏览器');
+            });
+        }
+        
+        // 截取所有设备预览图
+        function captureAllScreenshots() {
+            // 显示加载提示
+            const originalText = screenshotAllBtn.innerHTML;
+            screenshotAllBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 截图中...';
+            
+            // 创建一个临时容器来包含所有设备预览
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '-9999px';
+            tempContainer.style.width = '100%';
+            tempContainer.style.backgroundColor = '#f5f7fa';
+            tempContainer.style.padding = '20px';
+            
+            // 克隆所有设备预览到临时容器
+            const devicePreviews = document.querySelectorAll('.device-preview');
+            devicePreviews.forEach(preview => {
+                const clone = preview.cloneNode(true);
+                // 移除截图按钮
+                const screenshotBtn = clone.querySelector('.screenshot-btn');
+                if (screenshotBtn) screenshotBtn.remove();
+                tempContainer.appendChild(clone);
+            });
+            
+            document.body.appendChild(tempContainer);
+            
+            // 截取整个临时容器
+            html2canvas(tempContainer, {
+                backgroundColor: '#f5f7fa',
+                scale: 1.5,
+                useCORS: true,
+                allowTaint: true,
+                logging: false
+            }).then(canvas => {
+                // 移除临时容器
+                document.body.removeChild(tempContainer);
+                
+                // 恢复按钮文本
+                screenshotAllBtn.innerHTML = originalText;
+                
+                // 显示截图预览
+                showScreenshotPreview(canvas.toDataURL('image/png'), '所有设备预览');
+            }).catch(error => {
+                console.error('截图失败:', error);
+                document.body.removeChild(tempContainer);
+                screenshotAllBtn.innerHTML = originalText;
+                alert('截图失败，请重试或使用其他浏览器');
+            });
+        }
+        
+        // 显示截图预览
+        function showScreenshotPreview(dataUrl, title) {
+            currentScreenshotData = dataUrl;
+            screenshotImage.src = dataUrl;
+            screenshotModal.style.display = 'flex';
+            
+            // 更新标题
+            const titleElement = screenshotModal.querySelector('h3');
+            titleElement.textContent = `${title} - 预览截图`;
+        }
+        
+        // 下载截图
+        function downloadScreenshotFile() {
+            if (!currentScreenshotData) return;
+            
+            const link = document.createElement('a');
+            link.download = `设备预览截图_${new Date().getTime()}.png`;
+            link.href = currentScreenshotData;
+            link.click();
+        }
+        
+        // 关闭截图预览
+        function closeScreenshotPreview() {
+            screenshotModal.style.display = 'none';
+            currentScreenshotData = null;
         }
         
         // 设备按钮点击事件
@@ -736,13 +959,23 @@
         // 按钮事件绑定
         loadBtn.addEventListener('click', loadUrlToPreviews);
         refreshBtn.addEventListener('click', refreshPreviews);
-        screenshotBtn.addEventListener('click', takeScreenshot);
+        screenshotAllBtn.addEventListener('click', captureAllScreenshots);
         clearBtn.addEventListener('click', clearPreviews);
+        downloadScreenshot.addEventListener('click', downloadScreenshotFile);
+        screenshotClose.addEventListener('click', closeScreenshotPreview);
+        closeScreenshot.addEventListener('click', closeScreenshotPreview);
         
         // 输入框回车键事件
         urlInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 loadUrlToPreviews();
+            }
+        });
+        
+        // 点击模态框外部关闭
+        screenshotModal.addEventListener('click', function(e) {
+            if (e.target === screenshotModal) {
+                closeScreenshotPreview();
             }
         });
         
