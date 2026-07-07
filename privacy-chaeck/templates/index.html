@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你泄露的信息</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --accent: #58a6ff;
+            --warn: #d2991d;
+            --danger: #f85149;
+            --mobile: #3fb950;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 0.2em;
+            text-align: center;
+        }
+        .subtitle {
+            color: #8b949e;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 18px;
+            width: 100%;
+            max-width: 1300px;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+            word-break: break-all;
+            transition: 0.2s;
+        }
+        .card:hover { border-color: var(--accent); }
+        .card h2 {
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-row {
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .key {
+            color: #8b949e;
+            min-width: 120px;
+        }
+        .value {
+            color: #f0f6fc;
+            font-family: monospace;
+            flex: 1;
+        }
+        .warning {
+            color: var(--warn);
+            font-weight: bold;
+        }
+        .danger {
+            color: var(--danger);
+            font-weight: bold;
+        }
+        .mobile-tag {
+            background: var(--mobile);
+            color: #000;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .fingerprint {
+            background: #1c2128;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #e6edf3;
+            word-break: break-all;
+            margin-top: 8px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        .btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .btn:hover { filter: brightness(1.1); }
+        .cookie-data {
+            background: #1c2128;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #e6edf3;
+            word-break: break-all;
+            margin-top: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+        .footer {
+            margin-top: 30px;
+            color: #484f58;
+            font-size: 0.8rem;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+        .progress {
+            color: #d2a8ff;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>你泄露的信息（部分吧）</h1>
+    <p class="subtitle">以后不要开任何小网站了<strong>但是我不会向任何服务器发送你的指纹数据</strong>。</p>
+
+    <div class="grid" id="info-grid">
+        <!-- 卡片由 JavaScript 动态生成 -->
+    </div>
+    <script>
+    (async function() {
+        const cards = {};
+
+        // ========== 1. 网络身份 ==========
+        cards['🌐 网络身份'] = {
+            '公网 IP': '检测中...',
+            '地理位置': '检测中...',
+            'ISP / 组织': '检测中...',
+            'User-Agent': navigator.userAgent,
+            '语言偏好': navigator.language || navigator.userLanguage,
+            '平台': navigator.platform,
+            'Referer': document.referrer || '(无)',
+        };
+
+        // ========== 2. 设备与系统 ==========
+        const ua = navigator.userAgent;
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod|webOS/i.test(ua);
+        const deviceModel = (() => {
+            let model = '未知';
+            if (ua.includes('iPhone')) {
+                const match = ua.match(/iPhone OS (\d+_\d+)/);
+                model = 'iPhone (iOS ' + (match ? match[1].replace('_', '.') : '?') + ')';
+            } else if (ua.includes('Android')) {
+                const match = ua.match(/Android\s[\d.]+;\s(.*?)\sBuild/);
+                if (match) model = match[1].trim();
+                else model = 'Android 设备';
+            }
+            return model;
+        })();
+
+        cards['📱 设备信息'] = {
+            '设备类型': isMobile ? '📱 移动设备' : '🖥️ 桌面设备',
+            '推断型号': deviceModel,
+            '操作系统': navigator.platform || '未知',
+            'CPU 核心数': navigator.hardwareConcurrency || '未知',
+            '设备内存 (GB)': navigator.deviceMemory || '未知',
+            '最大触摸点数': navigator.maxTouchPoints,
+        };
+
+        // ========== 3. 屏幕与方向 ==========
+        cards['🖥️ 屏幕与方向'] = {
+            '屏幕分辨率': `${screen.width}x${screen.height}`,
+            '可用分辨率': `${screen.availWidth}x${screen.availHeight}`,
+            '色深': screen.colorDepth + 'bit',
+            '像素比 (DPR)': window.devicePixelRatio,
+            '当前方向': screen.orientation ? screen.orientation.type : '不支持',
+            '旋转角度': screen.orientation ? screen.orientation.angle + '°' : 'N/A',
+        };
+
+        // ========== 4. 时区时间 ==========
+        cards['🕒 时区与时间'] = {
+            '时区': Intl.DateTimeFormat().resolvedOptions().timeZone,
+            '时区偏移 (分钟)': new Date().getTimezoneOffset(),
+            '系统本地时间': new Date().toString(),
+        };
+
+        // ========== 5. 网络连接详情 ==========
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        cards['📶 网络连接'] = {
+            '有效类型': conn ? conn.effectiveType : 'API 不支持',
+            '下行带宽 (Mbps)': conn ? conn.downlink + ' Mbps' : 'API 不支持',
+            '往返时间 (ms)': conn ? conn.rtt + ' ms' : 'API 不支持',
+            '数据节省模式': conn ? (conn.saveData ? '已开启' : '未开启') : 'API 不支持',
+        };
+
+        // ========== 6. 电池状态 ==========
+        if (navigator.getBattery) {
+            try {
+                const battery = await navigator.getBattery();
+                cards['🔋 电池状态'] = {
+                    '电量': Math.round(battery.level * 100) + '%',
+                    '是否充电': battery.charging ? '⚡ 充电中' : '🔋 使用电池',
+                    '充满所需时间': battery.chargingTime === Infinity ? '计算中...' : Math.round(battery.chargingTime / 60) + ' 分钟',
+                    '放电剩余时间': battery.dischargingTime === Infinity ? '计算中...' : Math.round(battery.dischargingTime / 60) + ' 分钟',
+                };
+            } catch (e) {
+                cards['🔋 电池状态'] = { '状态': '获取失败' };
+            }
+        } else {
+            cards['🔋 电池状态'] = { '状态': '浏览器不支持 Battery API' };
+        }
+
+        // ========== 7. 硬件信息（GPU） ==========
+        function getGPU() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'WebGL 不可用';
+                }
+            } catch (e) {}
+            return '不支持 WebGL';
+        }
+        cards['⚙️ 图形硬件'] = {
+            'GPU 渲染器': getGPU(),
+        };
+
+        // ========== 8. 数字指纹 ==========
+        function getCanvasFingerprint() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 280;
+            canvas.height = 60;
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px "Arial"';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText('BrowserLeaks, <canvas> 指纹', 2, 15);
+            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+            ctx.fillText('BrowserLeaks, <canvas> 指纹', 4, 17);
+            return canvas.toDataURL();
+        }
+        const canvasData = getCanvasFingerprint();
+        const canvasHash = canvasData.length;
+
+        function getWebGLFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl');
+                if (!gl) return '不支持';
+                const params = ['VENDOR', 'RENDERER', 'VERSION', 'SHADING_LANGUAGE_VERSION',
+                                'MAX_TEXTURE_SIZE', 'MAX_VIEWPORT_DIMS'];
+                let fp = '';
+                for (let p of params) {
+                    try { fp += p + '=' + gl.getParameter(gl[p]) + ';'; } catch(e) {}
+                }
+                return fp;
+            } catch(e) { return '获取失败'; }
+        }
+        const webglFP = getWebGLFingerprint();
+        const webglHash = webglFP.length;
+
+        async function getAudioFingerprint() {
+            try {
+                const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 44100, 44100);
+                const oscillator = ctx.createOscillator();
+                const analyser = ctx.createAnalyser();
+                const gain = ctx.createGain();
+                const processor = ctx.createScriptProcessor(4096, 1, 1);
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(10000, ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                oscillator.connect(analyser);
+                analyser.connect(processor);
+                processor.connect(ctx.destination);
+                oscillator.start(0);
+                return new Promise((resolve) => {
+                    processor.onaudioprocess = () => {
+                        const buffer = new Float32Array(analyser.frequencyBinCount);
+                        analyser.getFloatFrequencyData(buffer);
+                        let hash = 0;
+                        for (let i = 0; i < buffer.length; i++) {
+                            hash = (hash << 5) - hash + buffer[i];
+                            hash |= 0;
+                        }
+                        oscillator.stop();
+                        processor.disconnect();
+                        resolve('AudioHash:' + hash);
+                    };
+                    setTimeout(() => resolve('超时'), 1000);
+                });
+            } catch(e) {
+                return '不支持音频上下文';
+            }
+        }
+
+        function detectFonts() {
+            const baseFonts = ['monospace', 'sans-serif', 'serif'];
+            const testFonts = [
+                'Arial', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana',
+                'Trebuchet MS', 'Comic Sans MS', 'Impact', 'Helvetica', 'Microsoft YaHei',
+                'SimSun', 'SimHei', '苹方', '华文细黑', 'Roboto', 'Open Sans'
+            ];
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const testStr = 'mmmmmmmmmmlli';
+            const size = '72px';
+            const baseWidths = {};
+            for (let bf of baseFonts) {
+                ctx.font = `${size} ${bf}`;
+                baseWidths[bf] = ctx.measureText(testStr).width;
+            }
+            const detected = [];
+            for (let font of testFonts) {
+                for (let bf of baseFonts) {
+                    ctx.font = `${size} '${font}', ${bf}`;
+                    if (ctx.measureText(testStr).width !== baseWidths[bf]) {
+                        detected.push(font);
+                        break;
+                    }
+                }
+            }
+            return detected;
+        }
+        const fonts = detectFonts();
+
+        cards['🖌️ 数字指纹'] = {
+            'Canvas 指纹长度': canvasHash,
+            'WebGL 指纹哈希': webglHash,
+            '音频指纹': '检测中...',
+            '已安装字体 (部分)': fonts.length > 0 ? fonts.slice(0, 5).join(', ') + (fonts.length > 5 ? '...' : '') : '未检测到',
+        };
+
+        getAudioFingerprint().then(fp => {
+            cards['🖌️ 数字指纹']['音频指纹'] = fp;
+            renderCards();
+        });
+
+        // ========== 9. 存储配额 ==========
+        if (navigator.storage && navigator.storage.estimate) {
+            try {
+                const estimate = await navigator.storage.estimate();
+                const quotaGB = (estimate.quota / (1024**3)).toFixed(1);
+                const usageGB = (estimate.usage / (1024**3)).toFixed(2);
+                cards['💾 存储配额'] = {
+                    '总配额 (GB)': quotaGB + ' GB',
+                    '已用空间 (GB)': usageGB + ' GB',
+                    '剩余空间 (GB)': (quotaGB - usageGB).toFixed(2) + ' GB',
+                    '⚠️ 注意': '配额可反映设备总存储大小',
+                };
+            } catch(e) {
+                cards['💾 存储配额'] = { '状态': '获取失败' };
+            }
+        } else {
+            cards['💾 存储配额'] = { '状态': 'Storage API 不支持' };
+        }
+
+        // ========== 10. 内存性能（Chrome） ==========
+        if (performance.memory) {
+            const mem = performance.memory;
+            cards['🧠 内存使用 (Chrome)'] = {
+                'JS 堆大小限制 (GB)': (mem.jsHeapSizeLimit / (1024**3)).toFixed(2) + ' GB',
+                '已用堆大小 (MB)': (mem.usedJSHeapSize / (1024**2)).toFixed(1) + ' MB',
+                '总堆大小 (MB)': (mem.totalJSHeapSize / (1024**2)).toFixed(1) + ' MB',
+                '⚠️ 推断': 'JS堆限制接近设备物理内存的 50%~70%',
+            };
+        }
+
+        // ========== 11. 插件与扩展 ==========
+        function getPlugins() {
+            if (navigator.plugins && navigator.plugins.length > 0) {
+                return Array.from(navigator.plugins).map(p => p.name).join(', ');
+            }
+            return '无插件信息 (现代浏览器已隐藏)';
+        }
+        cards['🧩 插件与扩展'] = {
+            '浏览器插件': getPlugins(),
+        };
+
+        // ========== 12. WebRTC 泄露 ==========
+        function getLocalIPs() {
+            return new Promise((resolve) => {
+                const ips = new Set();
+                const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+                pc.createDataChannel('');
+                pc.createOffer().then(offer => pc.setLocalDescription(offer));
+                pc.onicecandidate = (e) => {
+                    if (!e.candidate) {
+                        pc.close();
+                        resolve(Array.from(ips));
+                        return;
+                    }
+                    const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9:]+)/;
+                    const match = e.candidate.candidate.match(ipRegex);
+                    if (match) ips.add(match[1]);
+                };
+                setTimeout(() => {
+                    pc.close();
+                    resolve(Array.from(ips));
+                }, 2000);
+            });
+        }
+
+        // ========== 13. 移动传感器 ==========
+        cards['📳 移动传感器'] = {
+            '震动支持': 'vibrate' in navigator ? '✅ 支持' : '❌ 不支持',
+            '环境光传感器': '检测中...',
+            '接近传感器': '检测中...',
+            '加速度计/陀螺仪': '等待事件...',
+            '绝对方向传感器': '等待事件...',
+        };
+
+        if ('AmbientLightSensor' in window) {
+            try {
+                const sensor = new AmbientLightSensor();
+                sensor.onreading = () => {
+                    cards['📳 移动传感器']['环境光传感器'] = `亮度: ${sensor.illuminance} lux`;
+                    renderCards();
+                };
+                sensor.onerror = () => {
+                    cards['📳 移动传感器']['环境光传感器'] = '需要用户手势或HTTPS';
+                    renderCards();
+                };
+                sensor.start();
+            } catch(e) {
+                cards['📳 移动传感器']['环境光传感器'] = '不可用';
+            }
+        } else {
+            cards['📳 移动传感器']['环境光传感器'] = '浏览器不支持';
+        }
+
+        if ('ProximitySensor' in window) {
+            try {
+                const sensor = new ProximitySensor();
+                sensor.onreading = () => {
+                    cards['📳 移动传感器']['接近传感器'] = `距离: ${sensor.near ? '近' : '远'} (${sensor.distance} cm)`;
+                    renderCards();
+                };
+                sensor.onerror = () => {
+                    cards['📳 移动传感器']['接近传感器'] = '需要用户手势或HTTPS';
+                    renderCards();
+                };
+                sensor.start();
+            } catch(e) {
+                cards['📳 移动传感器']['接近传感器'] = '不可用';
+            }
+        } else {
+            cards['📳 移动传感器']['接近传感器'] = '浏览器不支持';
+        }
+
+        let motionReceived = false;
+        let orientationReceived = false;
+        window.addEventListener('devicemotion', (e) => {
+            if (motionReceived) return;
+            const acc = e.accelerationIncludingGravity;
+            if (acc) {
+                cards['📳 移动传感器']['加速度计/陀螺仪'] =
+                    `x:${acc.x?.toFixed(2)} y:${acc.y?.toFixed(2)} z:${acc.z?.toFixed(2)}`;
+                motionReceived = true;
+                renderCards();
+            } else {
+                cards['📳 移动传感器']['加速度计/陀螺仪'] = '无数据(需用户手势)';
+                renderCards();
+            }
+        }, { once: false });
+        window.addEventListener('deviceorientation', (e) => {
+            if (orientationReceived) return;
+            if (e.alpha !== null) {
+                cards['📳 移动传感器']['绝对方向传感器'] =
+                    `alpha:${e.alpha?.toFixed(1)} beta:${e.beta?.toFixed(1)} gamma:${e.gamma?.toFixed(1)}`;
+                orientationReceived = true;
+                renderCards();
+            } else {
+                cards['📳 移动传感器']['绝对方向传感器'] = '无数据(需用户手势)';
+                renderCards();
+            }
+        }, { once: false });
+        setTimeout(() => {
+            if (!motionReceived) {
+                cards['📳 移动传感器']['加速度计/陀螺仪'] = '需要用户交互或HTTPS';
+                renderCards();
+            }
+            if (!orientationReceived) {
+                cards['📳 移动传感器']['绝对方向传感器'] = '需要用户交互或HTTPS';
+                renderCards();
+            }
+        }, 2000);
+
+        // ========== 14. Cookie 卡片（新增） ==========
+        cards['🍪 Cookie'] = {
+            'Cookie 启用': navigator.cookieEnabled ? '是' : '否',
+            '当前站点 Cookie': '(点击按钮查看)',
+        };
+
+        // ========== 15. 其他浏览器特性 ==========
+        cards['📋 其他信息'] = {
+            'Do Not Track': navigator.doNotTrack || '未设置',
+            '历史记录长度': history.length,
+            '在线状态': navigator.onLine ? '在线' : '离线',
+        };
+
+        // ========== 渲染函数 ==========
+        function renderCards() {
+            const grid = document.getElementById('info-grid');
+            grid.innerHTML = '';
+            for (const [title, items] of Object.entries(cards)) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const titleHtml = (title.includes('移动') || title.includes('传感器')) ?
+                    `<h2>${title} <span class="mobile-tag">MOBILE</span></h2>` : `<h2>${title}</h2>`;
+                card.innerHTML = titleHtml;
+
+                // 特殊处理 Cookie 卡片：添加按钮和数据容器
+                if (title === '🍪 Cookie') {
+                    card.innerHTML += `<div class="info-row"><span class="key">Cookie 启用:</span><span class="value">${items['Cookie 启用']}</span></div>`;
+                    card.innerHTML += `<div class="info-row"><span class="key">当前站点 Cookie:</span><span class="value" id="cookie-preview">(点击按钮查看)</span></div>`;
+                    card.innerHTML += `<button class="btn" id="show-cookie-btn">点击显示完整 Cookie</button>`;
+                    card.innerHTML += `<div class="cookie-data" id="cookie-data-box"></div>`;
+                } else {
+                    for (const [key, val] of Object.entries(items)) {
+                        card.innerHTML += `<div class="info-row"><span class="key">${key}:</span><span class="value">${val}</span></div>`;
+                    }
+                }
+                grid.appendChild(card);
+            }
+
+            // 追加Canvas指纹原始片段
+            const fpCard = document.createElement('div');
+            fpCard.className = 'card';
+            fpCard.innerHTML = `<h2>🔐 Canvas 指纹原始数据 (部分)</h2><div class="fingerprint">${canvasData.substring(0, 250)}...</div>`;
+            grid.appendChild(fpCard);
+
+            // 追加WebGL指纹片段
+            const wglCard = document.createElement('div');
+            wglCard.className = 'card';
+            wglCard.innerHTML = `<h2>🔐 WebGL 指纹片段</h2><div class="fingerprint">${webglFP.substring(0, 250)}</div>`;
+            grid.appendChild(wglCard);
+
+            // 绑定 Cookie 按钮事件
+            const cookieBtn = document.getElementById('show-cookie-btn');
+            const cookiePreview = document.getElementById('cookie-preview');
+            const cookieDataBox = document.getElementById('cookie-data-box');
+            if (cookieBtn && cookiePreview && cookieDataBox) {
+                cookieBtn.addEventListener('click', () => {
+                    const rawCookie = document.cookie;
+                    if (rawCookie) {
+                        cookiePreview.textContent = `共 ${rawCookie.split(';').length} 个 Cookie (非HttpOnly)`;
+                        cookieDataBox.textContent = rawCookie;
+                        cookieDataBox.style.display = 'block';
+                    } else {
+                        cookiePreview.textContent = '无 Cookie (或均为 HttpOnly)';
+                        cookieDataBox.textContent = '当前站点没有可读取的 Cookie';
+                        cookieDataBox.style.display = 'block';
+                    }
+                });
+            }
+        }
+
+        // ========== 异步获取公网IP和WebRTC信息，然后渲染 ==========
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                cards['🌐 网络身份']['公网 IP'] = data.ip || '未知';
+                cards['🌐 网络身份']['地理位置'] = `${data.country_name || ''} ${data.region || ''} ${data.city || ''}`.trim();
+                cards['🌐 网络身份']['ISP / 组织'] = data.org || '未知';
+                renderCards();
+            })
+            .catch(() => {
+                cards['🌐 网络身份']['公网 IP'] = '获取失败（检查网络）';
+                cards['🌐 网络身份']['地理位置'] = '——';
+                cards['🌐 网络身份']['ISP / 组织'] = '——';
+                renderCards();
+            });
+
+        getLocalIPs().then(ips => {
+            const local = ips.filter(ip => ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.16.'));
+            const pub = ips.filter(ip => !local.includes(ip));
+            cards['🕸️ WebRTC 泄露'] = {
+                '局域网 IP': local.join(', ') || '未检测到',
+                '公网 IP (WebRTC)': pub.join(', ') || '未检测到',
+            };
+            renderCards();
+        });
+
+        // 初始渲染
+        renderCards();
+
+        // 额外刷新确保异步数据更新
+        setTimeout(renderCards, 500);
+        setTimeout(renderCards, 1500);
+    })();
+    </script>
+</body>
+</html>
